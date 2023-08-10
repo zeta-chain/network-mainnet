@@ -1,5 +1,8 @@
 #!/bin/bash
 
+CHAINID="zetachain_7000-1"
+KEYRING="test"
+HOSTNAME=$(hostname)
 clibuilder()
 {
    echo ""
@@ -86,9 +89,7 @@ rm -rf ~/.zetacored/os_info
 
 
 # create keys
-CHAINID="athens_7001-1"
-KEYRING="test"
-HOSTNAME=$(hostname)
+
 echo "HOSTNAME: $HOSTNAME"
 
 
