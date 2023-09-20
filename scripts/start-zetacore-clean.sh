@@ -10,6 +10,7 @@ killall zetacored
 rm -rf ~/.zetacored/data/snapshots
 rm -rf ~/.zetacored/data/cs.wal
 rm -rf ~/.zetacored/data/*.db
+rm -rf ~/.zetacored/data/priv_validator_state.json
 echo '{"height":"0","round":0,"step":0}' | jq . > ~/.zetacored/data/priv_validator_state.json
 
 rm -rf ~/.zetacored/config/genesis.json

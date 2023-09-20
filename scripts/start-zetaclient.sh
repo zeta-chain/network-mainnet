@@ -38,4 +38,4 @@ echo "operatorAddress: $operatorAddress"
 
 zetaclientd init --peer "$peer" --operator "$operatorAddress" --public-ip "$MYIP" --chain-id $CHAINID
 zetaclientd start >> ~/.zetacored/zetaclient.log 2>&1  &
-52.3.196.71
+
