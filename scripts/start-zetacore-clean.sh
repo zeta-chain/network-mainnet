@@ -1,0 +1,17 @@
+#!/bin/bash
+CHAINID="zetachain_70000-1"
+KEYRING="test"
+
+HOSTNAME=$(hostname)
+
+
+
+killall zetacored
+rm -rf ~/.zetacored/data/snapshots
+rm -rf ~/.zetacored/data/cs.wal
+rm -rf ~/.zetacored/data/*.db
+echo '{"height":"0","round":0,"step":0}' | jq . > ~/.zetacored/data/priv_validator_state.json
+
+rm -rf ~/.zetacored/config/genesis.json
+cp -a network_files/config/genesis.json ~/.zetacored/config/
+zetacored start --pruning=nothing --minimum-gas-prices=0.0001azeta --json-rpc.api eth,txpool,personal,net,debug,web3,miner --api.enable >> ~/.zetacored/zetacored.log 2>&1  &

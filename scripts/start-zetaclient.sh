@@ -36,5 +36,6 @@ peer=/ip4/"$SEEDIP"/tcp/6668/p2p/"$SEED"
 operatorAddress=$(zetacored keys show operator -a --keyring-backend=test)
 echo "operatorAddress: $operatorAddress"
 
-zetaclientd init --peer "$peer" --operator "$operatorAddress" --public-ip "$MYIP"
+zetaclientd init --peer "$peer" --operator "$operatorAddress" --public-ip "$MYIP" --chain-id $CHAINID
 zetaclientd start >> ~/.zetacored/zetaclient.log 2>&1  &
+52.3.196.71
