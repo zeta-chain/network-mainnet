@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2023-09-21T03:54:00.400456Z",
+  "genesis_time": "2023-09-21T05:44:46.721007Z",
   "chain_id": "zetachain_70000-1",
   "initial_height": "1",
   "consensus_params": {
@@ -574,26 +574,6 @@
       "observers": [
         {
           "observer_chain": {
-            "chain_name": 3,
-            "chain_id": 8332
-          },
-          "observer_list": [
-            "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
-            "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v"
-          ]
-        },
-        {
-          "observer_chain": {
-            "chain_name": 5,
-            "chain_id": 56
-          },
-          "observer_list": [
-            "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
-            "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v"
-          ]
-        },
-        {
-          "observer_chain": {
             "chain_name": 1,
             "chain_id": 1
           },
@@ -606,6 +586,26 @@
           "observer_chain": {
             "chain_name": 2,
             "chain_id": 70000
+          },
+          "observer_list": [
+            "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
+            "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v"
+          ]
+        },
+        {
+          "observer_chain": {
+            "chain_name": 3,
+            "chain_id": 8332
+          },
+          "observer_list": [
+            "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
+            "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v"
+          ]
+        },
+        {
+          "observer_chain": {
+            "chain_name": 5,
+            "chain_id": 56
           },
           "observer_list": [
             "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
@@ -706,7 +706,7 @@
           "zetapub1addwnpepqgz949cr6mdm3rxh02gwjl3n0mm4sxhp3xgh872jvtvk38da9dddwxlpjhk",
           "zetapub1addwnpepqtqmwf50rstr2e4dlszmj5qmrll0nkw3egmyzn7ym0w7878y4ateuq0awd7"
         ],
-        "blockNumber": 500
+        "blockNumber": 100
       },
       "core_params_list": {}
     },
