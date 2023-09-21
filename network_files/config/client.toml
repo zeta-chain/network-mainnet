@@ -6,7 +6,7 @@
 ###############################################################################
 
 # The network chain ID
-chain-id = "zetachain_7000-1"
+chain-id = "zetachain_70000-1"
 # The keyring's backend, where the keys are stored (os|file|kwallet|pass|test|memory)
 keyring-backend = "test"
 # CLI output format (text|json)
