@@ -43,7 +43,7 @@ rm -rf ~/.zetacored/config/genesis.json
 cp -a network_files/config/genesis.json ~/.zetacored/config/
 echo "Start zetacored---------->"
 zetacored start --pruning=nothing --minimum-gas-prices=0.0001azeta --json-rpc.api eth,txpool,personal,net,debug,web3,miner --api.enable >> ~/.zetacored/zetacored.log 2>&1  &
-sleep 10
+sleep 20
 
 MYIP=$(curl ifconfig.me)
 
