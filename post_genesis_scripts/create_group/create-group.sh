@@ -2,7 +2,7 @@
 CHAINID="zetachain_70000-1"
 KEYRING="test"
 HOSTNAME=$(hostname)
-signer="tanmay"
+signer="operator"
 nodeip="localhost"
 node=tcp://$nodeip:26657
 echo "node: $node"

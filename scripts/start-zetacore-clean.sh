@@ -11,6 +11,7 @@ echo "Cleaning data---------->"
 rm -rf ~/.zetacored/data/snapshots
 rm -rf ~/.zetacored/data/cs.wal
 rm -rf ~/.zetacored/data/*.db
+rm -rf ~/.zetacored/config/addrbook.json
 rm -rf ~/.zetacored/data/priv_validator_state.json
 echo "Create new priv_validator_state.json---------->"
 echo '{"height":"0","round":0,"step":0}' | jq . > ~/.zetacored/data/priv_validator_state.json
