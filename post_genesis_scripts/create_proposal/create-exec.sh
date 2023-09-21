@@ -2,7 +2,7 @@
 CHAINID="zetachain_70000-1"
 KEYRING="test"
 HOSTNAME=$(hostname)
-signer="tanmay"
+signer="operator"
 nodeip="localhost"
 node=tcp://$nodeip:26657
 clibuilder()
@@ -37,5 +37,5 @@ zetacored tx group vote "$PID" $signerAddress VOTE_OPTION_YES metadata --from $s
 #sleep 5
 zetacored tx group exec "$PID" --from $signer --gas=auto --gas-adjustment=1.5 --gas-prices=0.01azeta --chain-id=$CHAINID --keyring-backend=$KEYRING -y --broadcast-mode=block --node=$node
 
-zetacored q block --node=tcp://3.218.170.198:26657 | jq .block.header.height
+zetacored q block --node=$node | jq .block.header.height
 
