@@ -7,6 +7,7 @@ HOSTNAME=$(hostname)
 
 echo "Kill all zetacored---------->"
 killall zetacored
+killall zetaclientd
 echo "Cleaning data---------->"
 rm -rf ~/.zetacored/data/snapshots
 rm -rf ~/.zetacored/data/cs.wal
