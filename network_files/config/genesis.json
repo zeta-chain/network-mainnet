@@ -1,11 +1,11 @@
 {
-  "genesis_time": "2023-09-20T04:15:41.348867Z",
-  "chain_id": "localnet_101-1",
+  "genesis_time": "2023-09-21T03:54:00.400456Z",
+  "chain_id": "zetachain_70000-1",
   "initial_height": "1",
   "consensus_params": {
     "block": {
       "max_bytes": "22020096",
-      "max_gas": "10000000",
+      "max_gas": "500000000",
       "time_iota_ms": "1000"
     },
     "evidence": {
@@ -31,46 +31,6 @@
         "sig_verify_cost_secp256k1": "1000"
       },
       "accounts": [
-        {
-          "@type": "/ethermint.types.v1.EthAccount",
-          "base_account": {
-            "address": "zeta13c7p3xrhd6q2rx3h235jpt8pjdwvacyw6twpax",
-            "pub_key": null,
-            "account_number": "0",
-            "sequence": "0"
-          },
-          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
-        },
-        {
-          "@type": "/ethermint.types.v1.EthAccount",
-          "base_account": {
-            "address": "zeta10up34mvwjhjd9xkq56fwsf0k75vtg287uav69n",
-            "pub_key": null,
-            "account_number": "0",
-            "sequence": "0"
-          },
-          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
-        },
-        {
-          "@type": "/ethermint.types.v1.EthAccount",
-          "base_account": {
-            "address": "zeta1f203dypqg5jh9hqfx0gfkmmnkdfuat3jr45ep2",
-            "pub_key": null,
-            "account_number": "0",
-            "sequence": "0"
-          },
-          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
-        },
-        {
-          "@type": "/ethermint.types.v1.EthAccount",
-          "base_account": {
-            "address": "zeta1unzpyll3tmutf0r8sqpxpnj46vtdr59mw8qepx",
-            "pub_key": null,
-            "account_number": "0",
-            "sequence": "0"
-          },
-          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
-        },
         {
           "@type": "/ethermint.types.v1.EthAccount",
           "base_account": {
@@ -197,6 +157,15 @@
           "expiration": null
         },
         {
+          "granter": "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
+          "grantee": "zeta1n7vhhsj67fvc8cnsvzr9jwwvz2x0ety0p9stpu",
+          "authorization": {
+            "@type": "/cosmos.authz.v1beta1.GenericAuthorization",
+            "msg": "/zetachain.zetacore.observer.MsgAddBlockHeader"
+          },
+          "expiration": null
+        },
+        {
           "granter": "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v",
           "grantee": "zeta17mc930zxrwy68ku6jt4qa0c4v9k99jcs79cp8t",
           "authorization": {
@@ -276,6 +245,15 @@
             "msg": "/zetachain.zetacore.observer.MsgAddBlameVote"
           },
           "expiration": null
+        },
+        {
+          "granter": "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v",
+          "grantee": "zeta17mc930zxrwy68ku6jt4qa0c4v9k99jcs79cp8t",
+          "authorization": {
+            "@type": "/cosmos.authz.v1beta1.GenericAuthorization",
+            "msg": "/zetachain.zetacore.observer.MsgAddBlockHeader"
+          },
+          "expiration": null
         }
       ]
     },
@@ -286,34 +264,7 @@
       },
       "balances": [
         {
-          "address": "zeta1f203dypqg5jh9hqfx0gfkmmnkdfuat3jr45ep2",
-          "coins": [
-            {
-              "denom": "azeta",
-              "amount": "4200000000000000000000000"
-            }
-          ]
-        },
-        {
           "address": "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
-          "coins": [
-            {
-              "denom": "azeta",
-              "amount": "4200000000000000000000000"
-            }
-          ]
-        },
-        {
-          "address": "zeta10up34mvwjhjd9xkq56fwsf0k75vtg287uav69n",
-          "coins": [
-            {
-              "denom": "azeta",
-              "amount": "1000000000000000000000"
-            }
-          ]
-        },
-        {
-          "address": "zeta13c7p3xrhd6q2rx3h235jpt8pjdwvacyw6twpax",
           "coins": [
             {
               "denom": "azeta",
@@ -340,15 +291,6 @@
           ]
         },
         {
-          "address": "zeta1unzpyll3tmutf0r8sqpxpnj46vtdr59mw8qepx",
-          "coins": [
-            {
-              "denom": "azeta",
-              "amount": "1000000000000000000000"
-            }
-          ]
-        },
-        {
           "address": "zeta17mc930zxrwy68ku6jt4qa0c4v9k99jcs79cp8t",
           "coins": [
             {
@@ -361,7 +303,7 @@
       "supply": [
         {
           "denom": "azeta",
-          "amount": "16804000000000000000000000"
+          "amount": "8402000000000000000000000"
         }
       ],
       "denom_metadata": []
@@ -605,7 +547,7 @@
         "max_deposit_period": "172800s"
       },
       "voting_params": {
-        "voting_period": "7200s"
+        "voting_period": "900s"
       },
       "tally_params": {
         "quorum": "0.334000000000000000",
@@ -632,8 +574,8 @@
       "observers": [
         {
           "observer_chain": {
-            "chain_name": 15,
-            "chain_id": 18444
+            "chain_name": 3,
+            "chain_id": 8332
           },
           "observer_list": [
             "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
@@ -642,8 +584,18 @@
         },
         {
           "observer_chain": {
-            "chain_name": 14,
-            "chain_id": 1337
+            "chain_name": 5,
+            "chain_id": 56
+          },
+          "observer_list": [
+            "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
+            "zeta15gt5eqsce23wex2lqxuxt6arer2z7786rrce6v"
+          ]
+        },
+        {
+          "observer_chain": {
+            "chain_name": 1,
+            "chain_id": 1
           },
           "observer_list": [
             "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
@@ -653,7 +605,7 @@
         {
           "observer_chain": {
             "chain_name": 2,
-            "chain_id": 101
+            "chain_id": 70000
           },
           "observer_list": [
             "zeta1d9ap398zsmrhmt78l7exw7xggt2jjkj70ed53s",
@@ -687,8 +639,8 @@
         "observer_params": [
           {
             "chain": {
-              "chain_name": 15,
-              "chain_id": 18444
+              "chain_name": 3,
+              "chain_id": 8332
             },
             "ballot_threshold": "0.660000000000000000",
             "min_observer_delegation": "1000000000000000000000.000000000000000000",
@@ -696,8 +648,17 @@
           },
           {
             "chain": {
-              "chain_name": 14,
-              "chain_id": 1337
+              "chain_name": 5,
+              "chain_id": 56
+            },
+            "ballot_threshold": "0.660000000000000000",
+            "min_observer_delegation": "1000000000000000000000.000000000000000000",
+            "is_supported": true
+          },
+          {
+            "chain": {
+              "chain_name": 1,
+              "chain_id": 1
             },
             "ballot_threshold": "0.660000000000000000",
             "min_observer_delegation": "1000000000000000000000.000000000000000000",
@@ -706,7 +667,7 @@
           {
             "chain": {
               "chain_name": 2,
-              "chain_id": 101
+              "chain_id": 70000
             },
             "ballot_threshold": "0.660000000000000000",
             "min_observer_delegation": "1000000000000000000000.000000000000000000",
