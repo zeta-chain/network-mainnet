@@ -1,9 +1,9 @@
 #!/bin/bash
-CHAINID="zetachain_7000-1"
+CHAINID="zetachain_70000-1"
 KEYRING="test"
 HOSTNAME=$(hostname)
 signer="val0_op_se"
-nodeip="3.218.170.198"
+nodeip="localhost"
 node=tcp://$nodeip:26657
 
 
