@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2023-09-22T18:03:51.965267Z",
+  "genesis_time": "2023-09-22T18:45:55.639933Z",
   "chain_id": "zetachain_70000-1",
   "initial_height": "1",
   "consensus_params": {
@@ -833,7 +833,7 @@
           "nodeStatus": 4
         }
       ],
-      "permission_flags": {
+      "crosschain_flags": {
         "isInboundEnabled": true,
         "isOutboundEnabled": true
       },
