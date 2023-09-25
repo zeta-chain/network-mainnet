@@ -3,7 +3,7 @@ CHAINID="zetachain_70000-1"
 KEYRING="test"
 
 HOSTNAME=$(hostname)
-
+MYIP=$(curl ifconfig.me)
 operatorAddress=$(zetacored keys show operator -a --keyring-backend=test)
 echo "operatorAddress: $operatorAddress"
 
