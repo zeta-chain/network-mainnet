@@ -1,0 +1,17 @@
+{
+  "group_policy_address": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73",
+  "messages": [
+    {
+      "@type": "/zetachain.zetacore.crosschain.MsgWhitelistERC20",
+      "creator": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73",
+      "erc20_address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "chainId": 5,
+      "name": "USDC-eth_mainnet",
+      "symbol": "USDC",
+      "decimals": 6,
+      "gas_limit": 100000
+    }
+  ],
+  "metadata": "",
+  "proposers": ["zeta14qfnw7ww5gnk4swqs4p7rspsyy5effdf2edwsn"]
+}
