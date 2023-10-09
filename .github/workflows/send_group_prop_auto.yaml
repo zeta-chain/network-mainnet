@@ -46,7 +46,12 @@ jobs:
             # Loop through each file and execute the command
             for PROPOSAL in $NEW_PROPOSALS; do
                 echo "SUBMITTING PROPOSAL: $PROPOSAL"
-                echo "FROM CI ADDRESS: ${{ env.VOTING_ACCOUNT }} "
+                echo "FROM CI ADDRESS: ${{ env.VOTING_ACCOUNT }}"
+
+
+                GROUP_PROPOSAL_ADDRESS=$(jq -r '.group_policy_address' $PROPOSAL)
+                echo "FOR GROUP_PROPOSAL_ADDRESS: $GROUP_PROPOSAL_ADDRESS"
+
 
                 # zetacored tx group submit-proposal parameter_proposals/proposals/$PROPOSAL \
                 #   --from ${{ secrets.SIGNER }} ${{ env.CONSTANT_PARAMS }} \
