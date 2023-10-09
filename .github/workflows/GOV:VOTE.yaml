@@ -1,0 +1,161 @@
+name: "GOVERNANCE:VOTE:GROUP"
+
+on:
+  workflow_dispatch:
+    inputs:
+      DRY_RUN:
+        description: 'DRY-RUN'
+        type: choice
+        required: true
+        default: 'true'
+        options: [ 'true', 'false']
+      PROPOSAL_ID:
+        description: 'PROPOSAL ID'
+        default: ''
+      VOTE_YES_OR_NO:
+        description: 'VOTE CHOICE'
+        default: 'VOTE_OPTION_YES'
+jobs:
+  vote_governance:
+    name: "GOVERNANCE:VOTE:GROUP"
+    runs-on: ["ubuntu-latest"]
+    env:
+      BINARY_URL: "https://github.com/zeta-chain/node/releases/latest/download/zetacored-ubuntu-22-amd64"
+      CHAIN_ID: "athens_7001-1"
+      API_NODE: "https://rpc-archive.athens.zetachain.com:1317"
+      TENDERMINT_NODE: "https://rpc-archive.athens.zetachain.com:26657"
+      DEPOSIT: "10000000azeta"
+      GAS_PRICES: "1.0azeta"
+      GROUP_POLICY_ADDRESS: "zeta1dlszg2sst9r69my4f84l3mj66zxcf3umcgujys30t84srg95dgvs5wguxq"
+      VOTE_YES_OR_NO: "${{ github.event.inputs.VOTE_YES_OR_NO }}"
+      VOTING_ACCOUNT: "zeta1utsn7w4dzluh026ylwkntmtc4jrpn2393nsggp"
+      METADATA: "ipfs://QmYMEcLNY7yAfur8KtH2rcJTJutPNuGEJLaPrWEM6iAcpP"
+
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "DOWNLOAD:BINARY:SET:PATH"
+        shell: bash
+        run: |
+          wget -q ${BINARY_URL}
+          mv zetacored-ubuntu-22-amd64 zetacored
+          echo "PATH=$(pwd):$PATH" >> ${GITHUB_ENV}
+          chmod 777 zetacored
+
+      - name: "SETUP:GOVERNANCE:KEYS"
+        shell: bash
+        run: |
+          echo "${{ secrets.GOV_MNEMONIC }}" | zetacored keys add governance --keyring-backend test --recover --hd-path="m/44'/118'/0'/0/0"
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP1"
+        shell: bash
+        run: |   
+          export GOV_PROPOSAL_NUM=${{ github.event.inputs.PROPOSAL_ID }}
+          OPERATOR_ADDRESS_LIST=("zeta1mte0r3jzkf2rkd7ex4p3xsd3fxqg7q29q0wxl5" "zeta18pksjzclks34qkqyaahf2rakss80mnusju77cm" "zeta18f7wch6kpfdmk6dk9qqhkszpjwrymev4fpte8p")
+          PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+          cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+          echo "**************PROPOSAL VOTE*********************"
+          if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+            echo "DRY RUN"
+            echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+            echo "PROPOSAL JSON DEBUG"
+            cat $PROPOSAL_FILENAME
+          else
+            for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+            do
+               zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+               zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+               rm -rf tmp.json
+               jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+            done
+            echo "Submitting Proposal - $PROPOSAL_FILENAME"
+            echo "PROPOSAL JSON DEBUG"
+            cat $PROPOSAL_FILENAME
+            echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+            TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+            sleep 10
+            export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+            echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+            zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --from governance --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+            sleep 10
+            zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+          fi
+
+      - name: "Sleep for 10 seconds"
+        shell: bash
+        run: |
+            sleep 10
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP2"
+        shell: bash
+        run: |   
+            export GOV_PROPOSAL_NUM=${{ github.event.inputs.PROPOSAL_ID }}
+            OPERATOR_ADDRESS_LIST=("zeta1w8qa37h22h884vxedmprvwtd3z2nwakxu9k935" "zeta1j8g8ch4uqgl3gtet3nntvczaeppmlxajqwh5u6" "zeta1dxyzsket66vt886ap0gnzlnu5pv0y99v086wnz")
+            PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+            cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+            echo "**************PROPOSAL VOTE*********************"
+            if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+              echo "DRY RUN"
+              echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+              echo "PROPOSAL JSON DEBUG"
+              cat $PROPOSAL_FILENAME
+            else
+              for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+              do
+                 zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+                 zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+                 rm -rf tmp.json
+                 jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+              done
+              echo "Submitting Proposal - $PROPOSAL_FILENAME"
+              echo "PROPOSAL JSON DEBUG"
+              cat $PROPOSAL_FILENAME
+              echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+              TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+              sleep 10
+              export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+              echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+              zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --from governance --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+              sleep 10
+              zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+            fi
+
+      - name: "Sleep for 10 seconds"
+        shell: bash
+        run: |
+                sleep 10
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP3"
+        shell: bash
+        run: |   
+              export GOV_PROPOSAL_NUM=${{ github.event.inputs.PROPOSAL_ID }}
+              OPERATOR_ADDRESS_LIST=("zeta1w5czgpk5kc9etxw2anzhr0uyrr4fqks32qmk6k" "zeta1ymnrwg9e3xr9xkw42ygzjx34dyvwvtc23cnnxz" "zeta15ruj2tc76pnj9xtw64utktee7cc7w6vzaes73z")
+              PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+              cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+              echo "**************PROPOSAL VOTE*********************"
+              if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+                echo "DRY RUN"
+                echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+                echo "PROPOSAL JSON DEBUG"
+                cat $PROPOSAL_FILENAME
+              else
+                for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+                do
+                   zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+                   zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+                   rm -rf tmp.json
+                   jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+                done
+                echo "Submitting Proposal - $PROPOSAL_FILENAME"
+                echo "PROPOSAL JSON DEBUG"
+                cat $PROPOSAL_FILENAME
+                echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+                TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+                sleep 10
+                export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+                echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+                zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --from governance --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+                sleep 10
+                zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+              fi

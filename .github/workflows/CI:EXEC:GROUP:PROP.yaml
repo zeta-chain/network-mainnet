@@ -3,7 +3,7 @@ name: "ADD_GROUP_PROPOSAL"
 on:
     push:
         paths:
-          - 'groups/proposals/*.json'
+          - 'parameter_proposals/proposals/*.json'
         branches:
           - 'main'
 jobs:
@@ -19,6 +19,8 @@ jobs:
       VOTING_ACCOUNT: "zeta1utsn7w4dzluh026ylwkntmtc4jrpn2393nsggp"
       VOTE_YES_OR_NO: "VOTE_OPTION_YES"
       METADATA: "ipfs://QmYMEcLNY7yAfur8KtH2rcJTJutPNuGEJLaPrWEM6iAcpP"
+      EMERGENCY_GROUP_POLICY_ADDRESS: "zeta1dlszg2sst9r69my4f84l3mj66zxcf3umcgujys30t84srg95dgvs5wguxq" ## TODO Add this 
+
     steps:
       - uses: actions/checkout@v3
 
@@ -48,23 +50,29 @@ jobs:
                 echo "SUBMITTING PROPOSAL: $PROPOSAL"
                 echo "FROM CI ADDRESS: ${{ env.VOTING_ACCOUNT }}"
 
-
                 GROUP_PROPOSAL_ADDRESS=$(jq -r '.group_policy_address' $PROPOSAL)
-                echo "FOR GROUP_PROPOSAL_ADDRESS: $GROUP_PROPOSAL_ADDRESS"
+                echo "To GROUP_PROPOSAL_ADDRESS: $GROUP_PROPOSAL_ADDRESS"
 
+                # submit proposal and get tx hash 
+                TX_HASH=$(zetacored tx group submit-proposal "$PROPOSAL" --node=${{ env.TENDERMINT_NODE }} \
+                  --from ${{ secrets.SIGNER }} ${{ env.CONSTANT_PARAMS }} \
+                  --chain-id ${{ env.CHAIN_ID }} \
+                  -o json | jq .txhash -r)
+                echo "TX_HASH: $TX_HASH"
+                sleep 12
 
-                # zetacored tx group submit-proposal parameter_proposals/proposals/$PROPOSAL \
-                #   --from ${{ secrets.SIGNER }} ${{ env.CONSTANT_PARAMS }} \
-                #   --node=${{ github.event.inputs.TENDERMINT_NODE }} \
-                #   --chain-id ${{ env.CHAIN_ID }} \
-                # sleep 12
+                # echo "Get group proposal ID"
+                GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} --chain-id ${{ env.CHAIN_ID }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+                echo "GROUP_PROPOSAL_ID: $GROUP_PROPOSAL_ID"
 
-                # zetacored tx group vote ${GROUP_PROPOSAL_ID} ${{ env.VOTING_ACCOUNT }} ${{ env.VOTE_YES_OR_NO }} ${{ github.event.inputs.METADATA }} \
-                #   --from governance_mnemonic_account \
-                #   ${{ env.CONSTANT_PARAMS }} \
-                #   --chain-id ${{ env.CHAIN_ID }} \
-                #   --node=${{ github.event.inputs.TENDERMINT_NODE }} \
-                #   --exec 1
+                
+                # if [$GROUP_PROPOSAL_ADDRESS == ${{ env.EMERGENCY_GROUP_POLICY_ADDRESS }}]
+                zetacored tx group vote ${GROUP_PROPOSAL_ID} ${{ env.VOTING_ACCOUNT }} ${{ env.VOTE_YES_OR_NO }} ${{ github.event.inputs.METADATA }} \
+                  --from governance_mnemonic_account \
+                  ${{ env.CONSTANT_PARAMS }} \
+                  --chain-id ${{ env.CHAIN_ID }} \
+                  --node=${{ env.TENDERMINT_NODE }} \
+                  --exec 1
             done
 
     
@@ -79,20 +87,20 @@ jobs:
       #     for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
       #     do
       #       echo "Generate Action for Operator Address: ${OPERATOR_ADDRESS}"
-      #       echo 'zetacored ${{ env.TX_TYPE }} ${{ github.event.inputs.ACTION_INPUTS }} --from "${OPERATOR_ADDRESS}" ${{ env.CONSTANT_PARAMS }} --node=${{ github.event.inputs.TENDERMINT_NODE }} --chain-id ${{ env.CHAIN_ID }} --generate-only > tmp.json'
+      #       echo 'zetacored ${{ env.TX_TYPE }} ${{ github.event.inputs.ACTION_INPUTS }} --from "${OPERATOR_ADDRESS}" ${{ env.CONSTANT_PARAMS }} --node=${{ env.TENDERMINT_NODE }} --chain-id ${{ env.CHAIN_ID }} --generate-only > tmp.json'
       #       zetacored ${{ env.TX_TYPE }} ${{ github.event.inputs.ACTION_INPUTS }} \
       #         --from "${OPERATOR_ADDRESS}" \
-      #         ${{ env.CONSTANT_PARAMS }} --node=${{ github.event.inputs.TENDERMINT_NODE }} \
+      #         ${{ env.CONSTANT_PARAMS }} --node=${{ env.TENDERMINT_NODE }} \
       #         --chain-id ${{ env.CHAIN_ID }} \
       #         --generate-only > tmp.json
           
       #       echo "Generate Authz Exec Action for Above Action input"
-      #       echo 'zetacored tx authz exec tmp.json --from "${{ env.GROUP_POLICY_ADDRESS }}" --node=${{ github.event.inputs.TENDERMINT_NODE }} --keyring-backend test --generate-only --chain-id ${{ env.CHAIN_ID }} > action-"$OPERATOR_ADDRESS".json'
+      #       echo 'zetacored tx authz exec tmp.json --from "${{ env.GROUP_POLICY_ADDRESS }}" --node=${{ env.TENDERMINT_NODE }} --keyring-backend test --generate-only --chain-id ${{ env.CHAIN_ID }} > action-"$OPERATOR_ADDRESS".json'
       #       zetacored tx authz exec tmp.json \
       #         --from "${{ env.GROUP_POLICY_ADDRESS }}" \
       #         --keyring-backend test \
       #         --generate-only \
-      #         --chain-id ${{ env.CHAIN_ID }} --node=${{ github.event.inputs.TENDERMINT_NODE }} > action-"$OPERATOR_ADDRESS".json
+      #         --chain-id ${{ env.CHAIN_ID }} --node=${{ env.TENDERMINT_NODE }} > action-"$OPERATOR_ADDRESS".json
           
       #       echo "Remove tmp JSON"
       #       rm -rf tmp.json
@@ -103,13 +111,13 @@ jobs:
       #     done
           
       #     echo "get tx hash for proposal submission"
-      #     echo 'zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance_mnemonic_account ${{ env.CONSTANT_PARAMS }} --chain-id ${{ env.CHAIN_ID }} --node=${{ github.event.inputs.TENDERMINT_NODE }} -o json | jq .txhash -r'
-      #     TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance_mnemonic_account ${{ env.CONSTANT_PARAMS }} --chain-id ${{ env.CHAIN_ID }} --node=${{ github.event.inputs.TENDERMINT_NODE }} -o json | jq .txhash -r)
+      #     echo 'zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance_mnemonic_account ${{ env.CONSTANT_PARAMS }} --chain-id ${{ env.CHAIN_ID }} --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r'
+      #     TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance_mnemonic_account ${{ env.CONSTANT_PARAMS }} --chain-id ${{ env.CHAIN_ID }} --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
           
       #     sleep 20
           
       #     echo "Get group proposal ID"
-      #     export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ github.event.inputs.TENDERMINT_NODE }} --chain-id ${{ env.CHAIN_ID }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+      #     export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} --chain-id ${{ env.CHAIN_ID }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
       #     echo "***********"
       #     echo "GROUP_PROPOSAL_ID=${GROUP_PROPOSAL_ID}"
       #     echo "***********"
@@ -119,7 +127,7 @@ jobs:
       #       --from governance_mnemonic_account \
       #       ${{ env.CONSTANT_PARAMS }} \
       #       --chain-id ${{ env.CHAIN_ID }} \
-      #       --node=${{ github.event.inputs.TENDERMINT_NODE }} \
+      #       --node=${{ env.TENDERMINT_NODE }} \
       #       --exec 1
           
       #     sleep 20
@@ -129,7 +137,7 @@ jobs:
       #       --from governance_mnemonic_account \
       #       ${{ env.CONSTANT_PARAMS }} \
       #       --chain-id ${{ env.CHAIN_ID }} \
-      #       --node=${{ github.event.inputs.TENDERMINT_NODE }}
+      #       --node=${{ env.TENDERMINT_NODE }}
 
     #   - name: "Sleep for 20 seconds"
     #     shell: bash

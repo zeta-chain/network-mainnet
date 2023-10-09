@@ -1,0 +1,67 @@
+name: "CALCULATE:PROPOSAL:HEIGHT:FROM:DATETIME"
+
+on:
+  workflow_dispatch:
+    inputs:
+      UPGRADE_DATE:
+        description: 'ex. 6/28/2023 14:30 This is in UTC time. So please keep that in mind. Match the exact formatting of the example.'
+        default: ''
+jobs:
+  calculate_future_upgrade_height:
+    name: "CALCULATE:PROPOSAL:HEIGHT:FROM:DATETIME"
+    runs-on: ["ubuntu-latest"]
+    env:
+      BINARY_URL: "https://github.com/zeta-chain/node/releases/download/v9.0.0/zetacored-ubuntu-22-amd64"
+      TENDERMINT_NODE: "https://rpc-archive.athens.zetachain.com:26657"
+      API_NODE: "https://rpc-archive.athens.zetachain.com:1317"
+      UPGRADE_DATE: "${{ github.event.inputs.UPGRADE_DATE }}"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: "DOWNLOAD:BINARY:SET:PATH"
+        shell: bash
+        run: |
+          wget -q ${BINARY_URL}
+          mv zetacored-ubuntu-22-amd64 zetacored
+          echo "PATH=$(pwd):$PATH" >> ${GITHUB_ENV}
+          chmod 777 zetacored
+
+      - name: "RETRIEVE:VOTE:PERIOD"
+        shell: bash
+        run: |
+          vote_period=$(zetacored q gov params --node=${{ env.TENDERMINT_NODE }} -o json | jq .voting_params.voting_period -r)
+          echo "VOTING_PERIOD=${vote_period}" >> ${GITHUB_ENV}
+
+      - name: "CALCULATE:AVERAGE:NETWORK:BLOCKTIME"
+        uses: gzukel/CosmosComposites/average_network_blocktime@main
+        with:
+          avg_time_sample_size: "15"
+          rpc_url: "${{ env.TENDERMINT_NODE }}"
+
+      - name: "CALCULATE:PROPOSAL:HEIGHT:FROM:DATETIME"
+        uses: gzukel/CosmosComposites/calculate_future_upgrade_height@main
+        with:
+          upgrade_date: "${{ github.event.inputs.UPGRADE_DATE }}"
+          average_block_time: "${{ env.AVERAGE_BLOCK_TIME }}"
+          rpc_url: "${{ env.TENDERMINT_NODE }}"
+
+      - name: "CHECK:PROPOSAL:HEIGHT:BEYOND:VOTING:PERIOD"
+        uses: gzukel/CosmosComposites/time_to_upgrade_proposal@main
+        with:
+          upgrade_height: "${{ env.UPGRADE_HEIGHT }}"
+          average_block_time: "${{ env.AVERAGE_BLOCK_TIME }}"
+          rpc_url: "${{ env.TENDERMINT_NODE }}"
+          vote_period: "${{ env.VOTING_PERIOD }}"
+
+      - name: "CALCULATED_DETAILS"
+        shell: bash
+        run: |
+          echo "*********************************"
+          echo "UPGRADE HEIGHT: ${UPGRADE_HEIGHT}"
+          echo "UPGRADE DATE: ${UPGRADE_DATE}"
+          echo "*********************************"

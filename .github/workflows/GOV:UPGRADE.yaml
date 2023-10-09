@@ -1,0 +1,414 @@
+name: "GOVERNANCE:UPGRADE"
+
+on:
+  workflow_dispatch:
+    inputs:
+      DRY_RUN:
+        description: 'dry-run is utilized for testing the inputs and validating the governance command before you execute proposal. This will also send a message to a test discord channel so you can validate formatting.'
+        type: choice
+        required: true
+        default: 'true'
+        options: [ 'true', 'false']
+      CURRENT_VERSION:
+          description: 'This is the version of the application release in github and s3. ex. v4.0.0 This must contain the version tag exactly how it is represented in Github Releases because that is how it will be in s3 that it utilizes to build the download urls.'
+          default: ''
+      UPGRADE_VERSION:
+        description: 'This is the version of the application release in github and s3. ex. v4.0.0 This must contain the version tag exactly how it is represented in Github Releases because that is how it will be in s3 that it utilizes to build the download urls.'
+        default: ''
+      RELEASE_DESCRIPTION:
+        description: 'This will be the release description that will be displayed in the governance proposal'
+        default: ''
+      UPGRADE_HEIGHT:
+        description: 'Specify Manual Height for Upgrade'
+        required: true
+        default: ""
+
+jobs:
+  raise_governance:
+    name: "GOVERNANCE:UPGRADE"
+    runs-on: ["ubuntu-latest"]
+    env:
+      BINARY_URL: "https://github.com/zeta-chain/node/releases/download/${{ GitHub.event.inputs.CURRENT_VERSION }}/zetacored-ubuntu-22-amd64"
+      CHAIN_ID: "athens_7001-1"
+      TENDERMINT_NODE: "https://rpc-archive.athens.zetachain.com:26657"
+      API_NODE: "https://rpc-archive.athens.zetachain.com:1317"
+      BLOCK_PADDING: "1"
+      DEPOSIT: "10000000azeta"
+      GAS_PRICES: "1.0azeta"
+      S3_BUCKET_NAME: "zetachain-external-files"
+      S3_BUCKET_PATH: "binaries/athens3"
+      GROUP_POLICY_ADDRESS: "zeta1dlszg2sst9r69my4f84l3mj66zxcf3umcgujys30t84srg95dgvs5wguxq"
+      VOTE_YES_OR_NO: "VOTE_OPTION_YES"
+      VOTING_ACCOUNT: "zeta1utsn7w4dzluh026ylwkntmtc4jrpn2393nsggp"
+      METADATA: "ipfs://QmYMEcLNY7yAfur8KtH2rcJTJutPNuGEJLaPrWEM6iAcpP"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: "DOWNLOAD:BINARY:SET:PATH"
+        shell: bash
+        run: |
+          wget -q ${BINARY_URL}
+          mv zetacored-ubuntu-22-amd64 zetacored
+          echo "PATH=$(pwd):$PATH" >> ${GITHUB_ENV}
+          chmod 777 zetacored
+          pip install discord.py
+
+      - name: "VERSION:CHECK"
+        shell: bash
+        run: |
+          zetacored_version=$(zetacored version)
+          echo "${zetacored_version}"
+          if [ "${zetacored_version}" == "${{ github.event.inputs.CURRENT_VERSION }}" ]; then
+            echo "VERSION MATCHES"
+          else
+            echo "VERSION MISMATCH"
+            exit 2
+          fi
+
+      - name: "SETUP:GOVERNANCE:KEYS:VOTE:PERIOD"
+        shell: bash
+        run: |
+          echo "${{ secrets.GOV_MNEMONIC }}" | zetacored keys add governance --keyring-backend test --recover --hd-path="m/44'/118'/0'/0/0"
+          vote_period=$(zetacored q gov params --node=${{ env.TENDERMINT_NODE }} -o json | jq .voting_params.voting_period -r)
+          echo "VOTING_PERIOD=${vote_period}" >> ${GITHUB_ENV}
+
+      - name: "CALCULATE:AVERAGE:NETWORK:BLOCKTIME"
+        uses: gzukel/CosmosComposites/average_network_blocktime@main
+        with:
+          avg_time_sample_size: "15"
+          rpc_url: "${{ env.TENDERMINT_NODE }}"
+
+      - name: "CALCULATE:UPGRADE"
+        shell: bash
+        run: |
+          URL_ZETACORED_UBUNTU_22_ARM="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetacored-ubuntu-22-arm64"
+          URL_ZETACORED_UBUNTU_22_AMD="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetacored-ubuntu-22-amd64"
+          URL_ZETACLIENTD_UBUNTU_22_ARM="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetaclientd-ubuntu-22-arm64"
+          URL_ZETACLIENTD_UBUNTU_22_AMD="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetaclientd-ubuntu-22-amd64"
+          URL_ZETACLIENTD_ALPINE_AMD="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetaclientd-alpine-amd64"
+          URL_ZETACORED_ALPINE_AMD="https://github.com/zeta-chain/node/releases/download/${{ github.event.inputs.UPGRADE_VERSION }}/zetacored-alpine-amd64"
+
+          echo "******************TEST DOWNLOADING DYNAMICALLY GENERATED URLS*********************"
+          wget -q $URL_ZETACORED_UBUNTU_22_ARM || exit 1
+          wget -q $URL_ZETACORED_UBUNTU_22_AMD || exit 1
+          wget -q $URL_ZETACLIENTD_UBUNTU_22_ARM || exit 1
+          wget -q $URL_ZETACLIENTD_UBUNTU_22_AMD || exit 1
+          wget -q $URL_ZETACLIENTD_ALPINE_AMD || exit 11
+          wget -q $URL_ZETACORED_ALPINE_AMD || exit 1
+          echo "**********************************************************************************"
+
+          CHECKSUM_ZETACORED_UBUNTU_22_ARM=$(shasum -b -a 256 zetacored-ubuntu-22-arm64 | cut -d ' ' -f 1)
+          CHECKSUM_ZETACORED_UBUNTU_22_AMD=$(shasum -b -a 256 zetacored-ubuntu-22-amd64 | cut -d ' ' -f 1)
+          CHECKSUM_ZETACLIENTD_UBUNTU_22_ARM=$(shasum -b -a 256 zetaclientd-ubuntu-22-arm64 | cut -d ' ' -f 1)
+          CHECKSUM_ZETACLIENTD_UBUNTU_22_AMD=$(shasum -b -a 256 zetaclientd-ubuntu-22-amd64 | cut -d ' ' -f 1)
+          CHECKSUM_ZETACLIENTD_ALPINE_AMD=$(shasum -b -a 256 zetaclientd-alpine-amd64 | cut -d ' ' -f 1)
+          CHECKSUM_ZETACORED_ALPINE_AMD=$(shasum -b -a 256 zetacored-alpine-amd64 | cut -d ' ' -f 1)
+
+          echo "CHECKSUM_ZETACORED_UBUNTU_22_ARM=$CHECKSUM_ZETACORED_UBUNTU_22_ARM"
+          echo "CHECKSUM_ZETACORED_UBUNTU_22_AMD=$CHECKSUM_ZETACORED_UBUNTU_22_AMD"
+          echo "CHECKSUM_ZETACLIENTD_UBUNTU_22_ARM=$CHECKSUM_ZETACLIENTD_UBUNTU_22_ARM"
+          echo "CHECKSUM_ZETACLIENTD_UBUNTU_22_AMD=$CHECKSUM_ZETACLIENTD_UBUNTU_22_AMD"
+          echo "CHECKSUM_ZETACLIENTD_ALPINE_AMD=$CHECKSUM_ZETACLIENTD_ALPINE_AMD"
+          echo "CHECKSUM_ZETACORED_ALPINE_AMD=$CHECKSUM_ZETACORED_ALPINE_AMD"
+
+          echo "ZETACORED_AMD_LINK=$URL_ZETACORED_UBUNTU_22_AMD?checksum=sha256:$CHECKSUM_ZETACORED_UBUNTU_22_AMD" >> ${GITHUB_ENV}
+          echo "ZETACORED_ARM_LINK=$URL_ZETACORED_UBUNTU_22_ARM?checksum=sha256:$CHECKSUM_ZETACORED_UBUNTU_22_ARM" >> ${GITHUB_ENV}
+          echo "ZETACLIENTD_AMD_LINK=$URL_ZETACLIENTD_UBUNTU_22_AMD?checksum=sha256:$CHECKSUM_ZETACLIENTD_UBUNTU_22_AMD" >> ${GITHUB_ENV}
+          echo "ZETACLIENTD_ARM_LINK=$URL_ZETACLIENTD_UBUNTU_22_ARM?checksum=sha256:$CHECKSUM_ZETACLIENTD_UBUNTU_22_ARM" >> ${GITHUB_ENV}
+          echo "ZETACLIENTD_AMD_ALPINE_LINK=$URL_ZETACLIENTD_ALPINE_AMD?checksum=sha256:$CHECKSUM_ZETACLIENTD_ALPINE_AMD" >> ${GITHUB_ENV}
+          echo "ZETACORED_AMD_ALPINE_LINK=$URL_ZETACORED_ALPINE_AMD?checksum=sha256:$CHECKSUM_ZETACORED_ALPINE_AMD" >> ${GITHUB_ENV}
+          
+          source ${GITHUB_ENV}
+          
+          echo "******************UPGRADE INFORMATION*********************"
+          echo "ZETACORED_AMD_LINK: ${ZETACORED_AMD_LINK}"
+          echo "ZETACORED_ARM_LINK: ${ZETACORED_ARM_LINK}"
+          echo "ZETACLIENTD_AMD_LINK: ${ZETACLIENTD_AMD_LINK}"
+          echo "ZETACLIENTD_ARM_LINK: ${ZETACLIENTD_ARM_LINK}"
+          echo "ZETACLIENTD_AMD_LINK: ${ZETACLIENTD_AMD_ALINE_LINK}"
+          echo "ZETACORED_AMD_LINK: ${ZETACORED_AMD_ALPINE_LINK}"
+          echo "AVERAGE_BLOCK_TIME: ${AVERAGE_BLOCK_TIME}"
+          echo "******************UPGRADE INFORMATION*********************" 
+
+      - name: "CALCULATE:PROPOSAL:DATETIME"
+        uses: gzukel/CosmosComposites/time_to_upgrade_proposal@main
+        with:
+          upgrade_height: "${{ github.event.inputs.UPGRADE_HEIGHT }}"
+          average_block_time: "${{ env.AVERAGE_BLOCK_TIME }}"
+          rpc_url: "${{ env.TENDERMINT_NODE }}"
+          vote_period: "${{ env.VOTING_PERIOD }}"
+
+      - name: "RAISE:GOV:PROPOSAL"
+        shell: bash
+        run: |   
+          echo "UPGRADE:DATE: ${UPGRADE_DATE}"
+          
+          echo "******************CHECK UBUNTU LINK ZETACORED AMD HAS AMD*********************" 
+          ZETACORED_UBUNTU_AMD_CHECK=$(echo ${{ env.ZETACORED_AMD_LINK }} | grep "amd")          
+          if [ -z "${ZETACORED_UBUNTU_AMD_CHECK}" ]; then
+            echo "ZETACORED AMD LINK DOESN'T HAVE AMD IN THE LINK"
+            exit 2
+          fi
+          
+          echo "******************CHECK UBUNTU LINK ZETACORED ARM HAS ARM*********************" 
+          ZETACORED_UBUNTU_ARM_CHECK=$(echo ${{ env.ZETACORED_ARM_LINK }} | grep "arm")          
+          if [ -z "${ZETACORED_UBUNTU_ARM_CHECK}" ]; then
+            echo "ZETACORED ARM LINK DOESN'T HAVE ARM IN THE LINK"
+            exit 2
+          fi
+          
+          echo "******************CHECK UBUNTU LINK ZETACLIENTD AMD HAS AMD*********************" 
+          ZETACLIENTD_UBUNTU_AMD_CHECK=$(echo ${{ env.ZETACLIENTD_AMD_LINK }} | grep "amd")          
+          if [ -z "${ZETACLIENTD_UBUNTU_AMD_CHECK}" ]; then
+            echo "ZETACLIENTD AMD LINK DOESN'T HAVE AMD IN THE LINK"
+            exit 2
+          fi
+          
+          echo "******************CHECK UBUNTU LINK ZETACLIENTD ARM HAS ARM*********************" 
+          ZETACLIENTD_UBUNTU_ARM_CHECK=$(echo ${{ env.ZETACLIENTD_ARM_LINK }} | grep "arm")          
+          if [ -z "${ZETACLIENTD_UBUNTU_ARM_CHECK}" ]; then
+            echo "ZETACLIENTD ARM LINK DOESN'T HAVE ARM IN THE LINK"
+            exit 2
+          fi
+
+          echo "******************CHECK ALPINE LINK ZETACORED AMD HAS AMD*********************" 
+          ZETACORED_ALPINE_AMD_CHECK=$(echo ${{ env.ZETACORED_AMD_ALPINE_LINK }} | grep "amd")          
+          if [ -z "${ZETACORED_ALPINE_AMD_CHECK}" ]; then
+            echo "ZETACORED AMD LINK DOESN'T HAVE AMD IN THE LINK"
+            exit 2
+          fi
+          
+          echo "******************CHECK ALPINE LINK ZETACLIENTD AMD HAS AMD*********************" 
+          ZETACLIENTD_ALPINE_AMD_CHECK=$(echo ${{ env.ZETACLIENTD_AMD_ALPINE_LINK }} | grep "amd")          
+          if [ -z "${ZETACLIENTD_ALPINE_AMD_CHECK}" ]; then
+            echo "ZETACLIENTD AMD LINK DOESN'T HAVE AMD IN THE LINK"
+            exit 2
+          fi
+
+          echo "**************PROPOSAL TIME*********************"
+          if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+            echo 'zetacored tx gov submit-legacy-proposal software-upgrade "${{ github.event.inputs.VERSION }}" \
+              --from "governance" \
+              --deposit ${{ env.DEPOSIT }} \
+              --upgrade-height "${{ github.event.inputs.UPGRADE_HEIGHT }}" \
+              --upgrade-info "{\"binaries\": {\"zetaclientd-linux-alpine/amd64\": \"${{ env.ZETACLIENTD_AMD_ALPINE_LINK }}\",\"zetacored-linux-alpine/amd64\": \"${{ env.ZETACORED_AMD_ALPINE_LINK }}\",\"zetacored-linux/amd64\": \"${{ env.ZETACORED_AMD_LINK }}\",\"zetacored-linux/arm64\": \"${{ env.ZETACORED_ARM_LINK }}\",\"zetaclientd-linux/amd64\": \"${{ env.ZETACLIENTD_AMD_LINK }}\",\v: \"${{ env.ZETACLIENTD_ARM_LINK }}\"}}" \
+              --title "${{ github.event.inputs.VERSION }}" \
+              --description "${{ github.event.inputs.RELEASE_DESCRIPTION }}" \
+              --chain-id "${{ env.CHAIN_ID }}" \
+              --node "${{ env.TENDERMINT_NODE }}" \
+              --keyring-backend test \
+              --gas=auto \
+              --gas-adjustment=2 \
+              --gas-prices=${{ env.GAS_PRICES }} \
+              -y
+            '
+          else
+            echo "RAISE:PROPOSAL"
+            zetacored tx gov submit-legacy-proposal software-upgrade "${{ github.event.inputs.UPGRADE_VERSION }}" \
+              --from "governance" \
+              --deposit ${{ env.DEPOSIT }} \
+              --upgrade-height "${{ github.event.inputs.UPGRADE_HEIGHT }}" \
+              --upgrade-info '{"binaries": {"zetaclientd-linux-alpine/amd64": "${{ env.ZETACLIENTD_AMD_ALPINE_LINK }}","zetacored-linux-alpine/amd64": "${{ env.ZETACORED_AMD_ALPINE_LINK }}","zetacored-linux/amd64": "${{ env.ZETACORED_AMD_LINK }}","zetacored-linux/arm64": "${{ env.ZETACORED_ARM_LINK }}","zetaclientd-linux/amd64": "${{ env.ZETACLIENTD_AMD_LINK }}","zetaclientd-linux/arm64": "${{ env.ZETACLIENTD_ARM_LINK }}"}}' \
+              --title "${{ github.event.inputs.UPGRADE_VERSION }}" \
+              --description "${{ github.event.inputs.RELEASE_DESCRIPTION }}" \
+              --chain-id "${{ env.CHAIN_ID }}" \
+              --node "${{ env.TENDERMINT_NODE }}" \
+              --keyring-backend test \
+              --gas=auto \
+              --gas-adjustment=2 \
+              --gas-prices=${{ env.GAS_PRICES }} \
+              -y
+          fi
+          sleep 10
+          GOV_PROPOSAL_NUM=$(curl -s ${API_NODE}/cosmos/gov/v1beta1/proposals | jq -r '.proposals[] .proposal_id' | sort -n | tail -n 1 | tr -d '\n')
+          echo "GOV_PROPOSAL_NUM=${GOV_PROPOSAL_NUM}" >> ${GITHUB_ENV}
+
+      - name: "SEND:DISCORD:MESSAGE"
+        if: ${{ github.event.inputs.DRY_RUN != 'true' }}
+        uses: gzukel/CosmosComposites/send_discord_message@main
+        with:
+          discord_token: "${{ secrets.DISCORD_TOKEN }}"
+          discord_channel_id: "${{ secrets.DISCORD_CHANNEL_ID }}"
+          discord_message: |
+            Hey <@&1122981184255840306>! A new version of the zetachain node has been released.
+            GOVERNANCE PROPOSAL RAISE
+            -------------------------
+            VERSION: ${{ github.event.inputs.UPGRADE_VERSION }}
+            PROPOSAL_ID: ${{ env.GOV_PROPOSAL_NUM }}
+            ESTIMATED_UPGRADE_DATETIME: ${{ env.UPGRADE_DATE }} UTC
+            UPGRADE_HEIGHT: ${{ github.event.inputs.UPGRADE_HEIGHT }}
+            
+            UPGRADE_DESCRIPTION: 
+            -------------------------
+            ${{ github.event.inputs.RELEASE_DESCRIPTION }}
+
+      - name: "SEND:DISCORD:MESSAGE"
+        if: ${{ github.event.inputs.DRY_RUN != 'true' }}
+        uses: gzukel/CosmosComposites/send_discord_message@main
+        with:
+          discord_token: "${{ secrets.DISCORD_TOKEN }}"
+          discord_channel_id: "${{ secrets.DISCORD_CHANNEL_ID }}"
+          discord_message: |
+            BINARY_LINKS:
+            -------------------------
+            ZETACORED_AMD_LINK: ${{ env.ZETACORED_AMD_LINK }}
+            ZETACORED_ARM_LINK: ${{ env.ZETACORED_ARM_LINK }}
+            ZETACLIENTD_AMD_LINK: ${{ env.ZETACLIENTD_AMD_LINK }}
+            ZETACLIENTD_ARM_LINK: ${{ env.ZETACLIENTD_ARM_LINK }}
+            ZETACLIENTD_AMD_ALPINE_LINK: ${{ env.ZETACLIENTD_AMD_ALPINE_LINK }}
+            ZETACORED_AMD_ALPINE_LINK: ${{ env.ZETACORED_AMD_ALPINE_LINK }}
+            
+            VALIDATOR NOTES:
+            -------------------------
+            * Please be prepared to upgrade your binary at the estimated time.
+            * If you have questions or need assistance with the upgrade you can reach  in the `#nodes-discussion` channel in this Discord Server. 
+
+      - name: "DRY-RUN:SEND:DISCORD:MESSAGE"
+        if: ${{ github.event.inputs.DRY_RUN == 'true' }}
+        uses: gzukel/CosmosComposites/send_discord_message@main
+        with:
+          discord_token: "${{ secrets.DISCORD_TOKEN }}"
+          discord_channel_id: "${{ secrets.DISCORD_CHANNEL_ID_TESTING }}"
+          discord_message: |
+            Hey <@&1122981184255840306>! A new version of the zetachain node has been released.
+            GOVERNANCE PROPOSAL RAISE
+            -------------------------
+            VERSION: ${{ github.event.inputs.UPGRADE_VERSION }}
+            PROPOSAL_ID: ${{ env.GOV_PROPOSAL_NUM }}
+            ESTIMATED_UPGRADE_DATETIME: ${{ env.UPGRADE_DATE }} UTC
+            UPGRADE_HEIGHT: ${{ github.event.inputs.UPGRADE_HEIGHT }}
+            
+            UPGRADE_DESCRIPTION: 
+            -------------------------
+            ${{ github.event.inputs.RELEASE_DESCRIPTION }}
+            
+      - name: "DRY-RUN:SEND:DISCORD:MESSAGE"
+        if: ${{ github.event.inputs.DRY_RUN == 'true' }}
+        uses: gzukel/CosmosComposites/send_discord_message@main
+        with:
+          discord_token: "${{ secrets.DISCORD_TOKEN }}"
+          discord_channel_id: "${{ secrets.DISCORD_CHANNEL_ID_TESTING }}"
+          discord_message: |
+            BINARY_LINKS:
+            -------------------------
+            ZETACORED_AMD_LINK: ${{ env.ZETACORED_AMD_LINK }}
+            ZETACORED_ARM_LINK: ${{ env.ZETACORED_ARM_LINK }}
+            ZETACLIENTD_AMD_LINK: ${{ env.ZETACLIENTD_AMD_LINK }}
+            ZETACLIENTD_ARM_LINK: ${{ env.ZETACLIENTD_ARM_LINK }}
+            ZETACLIENTD_AMD_ALPINE_LINK: ${{ env.ZETACLIENTD_AMD_ALPINE_LINK }}
+            ZETACORED_AMD_ALPINE_LINK: ${{ env.ZETACORED_AMD_ALPINE_LINK }}
+            
+            VALIDATOR NOTES:
+            -------------------------
+            * Please be prepared to upgrade your binary at the estimated time.
+            * If you have questions or need assistance with the upgrade you can reach  in the `#nodes-discussion` channel in this Discord Server. 
+
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP1"
+        shell: bash
+        run: |   
+          echo "${GOV_PROPOSAL_NUM}"
+          OPERATOR_ADDRESS_LIST=("zeta1mte0r3jzkf2rkd7ex4p3xsd3fxqg7q29q0wxl5" "zeta18pksjzclks34qkqyaahf2rakss80mnusju77cm" "zeta18f7wch6kpfdmk6dk9qqhkszpjwrymev4fpte8p")
+          PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+          cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+          echo "**************PROPOSAL VOTE*********************"
+          if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+            echo "DRY RUN"
+            echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+            echo "PROPOSAL JSON DEBUG"
+            cat $PROPOSAL_FILENAME
+          else
+            for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+            do
+               zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+               zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+               rm -rf tmp.json
+               jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+            done
+            echo "Submitting Proposal - $PROPOSAL_FILENAME"
+            echo "PROPOSAL JSON DEBUG"
+            cat $PROPOSAL_FILENAME
+            echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+            TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+            sleep 10
+            export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+            echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+            zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+            sleep 10
+            zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+          fi
+          sleep 10
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP2"
+        shell: bash
+        run: |   
+            echo "${GOV_PROPOSAL_NUM}"
+            OPERATOR_ADDRESS_LIST=("zeta1w8qa37h22h884vxedmprvwtd3z2nwakxu9k935" "zeta1j8g8ch4uqgl3gtet3nntvczaeppmlxajqwh5u6" "zeta1dxyzsket66vt886ap0gnzlnu5pv0y99v086wnz")
+            PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+            cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+            echo "**************PROPOSAL VOTE*********************"
+            if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+              echo "DRY RUN"
+              echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+              echo "PROPOSAL JSON DEBUG"
+              cat $PROPOSAL_FILENAME
+            else
+              for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+              do
+                 zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+                 zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+                 rm -rf tmp.json
+                 jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+              done
+              echo "Submitting Proposal - $PROPOSAL_FILENAME"
+              echo "PROPOSAL JSON DEBUG"
+              cat $PROPOSAL_FILENAME
+              echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+              TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+              sleep 10
+              export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+              echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+              zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+              sleep 10
+              zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+            fi
+            sleep 10
+
+      - name: "RAISE:GOV:PROPOSAL:GROUP:VOTE:GROUP3"
+        shell: bash
+        run: |   
+              echo "${GOV_PROPOSAL_NUM}"
+              OPERATOR_ADDRESS_LIST=("zeta1w5czgpk5kc9etxw2anzhr0uyrr4fqks32qmk6k" "zeta1ymnrwg9e3xr9xkw42ygzjx34dyvwvtc23cnnxz" "zeta15ruj2tc76pnj9xtw64utktee7cc7w6vzaes73z")
+              PROPOSAL_FILENAME=group-votes-$GOV_PROPOSAL_NUM.json
+              cp .github/workflows/templates/gov_group_vote_proposal.template.json $PROPOSAL_FILENAME
+              echo "**************PROPOSAL VOTE*********************"
+              if [[ "${{ github.event.inputs.DRY_RUN }}" == "true" ]]; then
+                echo "DRY RUN"
+                echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+                echo "PROPOSAL JSON DEBUG"
+                cat $PROPOSAL_FILENAME
+              else
+                for OPERATOR_ADDRESS in "${OPERATOR_ADDRESS_LIST[@]}"
+                do
+                   zetacored tx gov vote $GOV_PROPOSAL_NUM $VOTE_YES_OR_NO --from "$OPERATOR_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}" > tmp.json
+                   zetacored tx authz exec tmp.json --from "$GROUP_POLICY_ADDRESS" --keyring-backend test --generate-only --chain-id "${{ env.CHAIN_ID }}"  > vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json
+                   rm -rf tmp.json
+                   jq --argjson msg1 "$(jq '.body.messages[0]' vote-$GOV_PROPOSAL_NUM-"$OPERATOR_ADDRESS".json)" '.messages += [$msg1]' $PROPOSAL_FILENAME > tmp.json && mv tmp.json $PROPOSAL_FILENAME
+                done
+                echo "Submitting Proposal - $PROPOSAL_FILENAME"
+                echo "PROPOSAL JSON DEBUG"
+                cat $PROPOSAL_FILENAME
+                echo "PROPOSAL VOTE ID: ${GOV_PROPOSAL_NUM}"
+                TX_HASH=$(zetacored tx group submit-proposal $PROPOSAL_FILENAME --exec 1 --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} -y --keyring-backend test --chain-id "${{ env.CHAIN_ID }}" --node=${{ env.TENDERMINT_NODE }} -o json | jq .txhash -r)
+                sleep 10
+                export GROUP_PROPOSAL_ID=$(zetacored query tx $TX_HASH --output json --node=${{ env.TENDERMINT_NODE }} | jq '.events' | jq -r '.[] | select(.type == "cosmos.group.v1.EventSubmitProposal") | .attributes[0].value' | base64 --decode | jq -r '.')
+                echo "GROUP PROPOSAL ID: ${GROUP_PROPOSAL_ID}"
+                zetacored tx group vote ${GROUP_PROPOSAL_ID} ${VOTING_ACCOUNT} ${VOTE_YES_OR_NO} ${METADATA} --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --from governance --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y --exec 1
+                sleep 10
+                zetacored tx group exec ${GROUP_PROPOSAL_ID} --from governance --chain-id "${{ env.CHAIN_ID }}" --keyring-backend test --gas=auto --gas-adjustment=2 --gas-prices=${{ env.GAS_PRICES }} --node=${{ env.TENDERMINT_NODE }} -y
+              fi
