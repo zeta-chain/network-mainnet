@@ -72,8 +72,8 @@ jobs:
                   --node=${{ env.TENDERMINT_NODE }} \
                   --exec 1
 
-                  sleep 12
-
+                  ## TODO -- Do we want or need this?
+                  # sleep 12
                   # # if [$GROUP_PROPOSAL_ADDRESS == ${{ env.EMERGENCY_GROUP_POLICY_ADDRESS }}]
                   # echo "EXECUTE GROUP PROPOSAL: $GROUP_PROPOSAL_ID"
                   # zetacored tx group exec $GROUP_PROPOSAL_ID \
