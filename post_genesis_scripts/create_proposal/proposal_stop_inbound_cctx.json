@@ -4,9 +4,10 @@
     {
       "@type": "/zetachain.zetacore.crosschain.MsgUpdatePermissionFlags",
       "creator": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73",
-      "isInboundEnabled": false
+      "isInboundEnabled": false,
+      "isOutboundEnabled": true,
     }
   ],
   "metadata": "",
-  "proposers": [""]
+  "proposers": ["zeta14qfnw7ww5gnk4swqs4p7rspsyy5effdf2edwsn"]
 }
