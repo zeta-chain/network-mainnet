@@ -22,8 +22,8 @@ zetacored keys add operator --ledger --hd-path ""
 ```
 ADDRESS=$(zetacored keys show operator -a)
 BALANCE="10000000000000000000azeta" # 10 ZETA
-MONIKOR="Monitor_name"
-zetacored init "$MONIKOR" --chain-id="zetachain_7000-1"
+MONIKER="Monitor_name"
+zetacored init "$MONIKER" --chain-id="zetachain_7000-1"
 zetacored add-genesis-account $ADDRESS $BALANCE
 zetacored gentx operator 10000000000000000000azeta --chain-id=zetachain_7000-1
 zetacored validate-genesis $GENESIS_PATH
@@ -35,7 +35,7 @@ zetacored validate-genesis $GENESIS_PATH
 mkdir -P ../genesis_files/gentx/
 cp ~/.zetacored/config/gentx/* ../genesis_files/gentx/
 git add ../genesis_files/gentx/*
-git commit -m "Gentx files for $MONIKOR"
+git commit -m "Gentx files for $MONIKER"
 ```
 
 ## Create PR
