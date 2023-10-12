@@ -22,19 +22,21 @@ zetacored keys add operator --ledger --hd-path ""
 ```
 ADDRESS=$(zetacored keys show operator -a)
 BALANCE="10000000000000000000azeta" # 10 ZETA
-MONIKER="Monitor_name"
+MONIKER="YOUR_VALIDATOR_NAME_HERE"
 zetacored init "$MONIKER" --chain-id="zetachain_7000-1"
 zetacored add-genesis-account $ADDRESS $BALANCE
 zetacored gentx operator 10000000000000000000azeta --chain-id=zetachain_7000-1
-zetacored validate-genesis $GENESIS_PATH
+zetacored validate-genesis
 ```
 
 ## Copy Gentx files back to this directory 
 
 ```
-mkdir -P ../genesis_files/gentx/
-cp ~/.zetacored/config/gentx/* ../genesis_files/gentx/
-git add ../genesis_files/gentx/*
+mkdir -p ./genesis_files/gentx/
+cp ~/.zetacored/config/gentx/* ./genesis_files/gentx/
+mv ./genesis_files/gentx/gentx-REPLACE_FILE_NAME_HERE ./genesis_files/gentx/gentx-$MONIKER
+git add ./genesis_files/gentx/*
+
 git commit -m "Gentx files for $MONIKER"
 ```
 
