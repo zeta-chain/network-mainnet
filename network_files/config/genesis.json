@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2023-10-11T19:08:33.274952Z",
+  "genesis_time": "2023-10-17T16:00:00Z",
   "chain_id": "zetachain_7000-1",
   "initial_height": "1",
   "consensus_params": {
@@ -14,7 +14,9 @@
       "max_bytes": "1048576"
     },
     "validator": {
-      "pub_key_types": ["ed25519"]
+      "pub_key_types": [
+        "ed25519"
+      ]
     },
     "version": {}
   },
@@ -36,11 +38,32 @@
     "bank": {
       "params": {
         "send_enabled": [],
-        "default_send_enabled": true
+        "default_send_enabled": false
       },
       "balances": [],
       "supply": [],
-      "denom_metadata": []
+      "denom_metadata": [
+        {
+          "base": "azeta",
+          "denom_units": [
+            {
+              "denom": "azeta",
+              "exponent": "0",
+              "aliases": [
+                "attozeta"
+              ]
+            },
+            {
+              "denom": "zeta",
+              "exponent": "18"
+            }
+          ],
+          "description": "The native token of ZetaChain",
+          "display": "zeta",
+          "name": "ZetaChain",
+          "symbol": "ZETA"
+        }
+      ]
     },
     "crisis": {
       "constant_fee": {
@@ -63,7 +86,7 @@
     },
     "distribution": {
       "params": {
-        "community_tax": "0.020000000000000000",
+        "community_tax": "0.0",
         "base_proposer_reward": "0.010000000000000000",
         "bonus_proposer_reward": "0.040000000000000000",
         "withdraw_addr_enabled": true
@@ -157,16 +180,16 @@
         "min_deposit": [
           {
             "denom": "azeta",
-            "amount": "10000000"
+            "amount": "100000000000000000"
           }
         ],
-        "max_deposit_period": "172800s"
+        "max_deposit_period": "1209600s"
       },
       "voting_params": {
-        "voting_period": "7200s"
+        "voting_period": "86400s"
       },
       "tally_params": {
-        "quorum": "0.334000000000000000",
+        "quorum": "0.4",
         "threshold": "0.500000000000000000",
         "veto_threshold": "0.334000000000000000"
       }
@@ -191,45 +214,8 @@
         "gasPriceIncreaseFlags": null
       },
       "params": {
-        "observer_params": [
-          {
-            "chain": {
-              "chain_name": "btc_regtest",
-              "chain_id": "18444"
-            },
-            "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1000000000000000000000.000000000000000000",
-            "is_supported": true
-          },
-          {
-            "chain": {
-              "chain_name": "goerli_localnet",
-              "chain_id": "1337"
-            },
-            "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1000000000000000000000.000000000000000000",
-            "is_supported": true
-          },
-          {
-            "chain": {
-              "chain_name": "zeta_mainnet",
-              "chain_id": "101"
-            },
-            "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1000000000000000000000.000000000000000000",
-            "is_supported": true
-          }
-        ],
-        "admin_policy": [
-          {
-            "policy_type": "group1",
-            "address": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73"
-          },
-          {
-            "policy_type": "group2",
-            "address": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73"
-          }
-        ],
+        "observer_params": [],
+        "admin_policy": [],
         "ballot_maturity_blocks": "100"
       },
       "keygen": null,
@@ -253,11 +239,11 @@
     "staking": {
       "params": {
         "unbonding_time": "1814400s",
-        "max_validators": 100,
+        "max_validators": 125,
         "max_entries": 7,
         "historical_entries": 10000,
         "bond_denom": "azeta",
-        "min_commission_rate": "0.000000000000000000"
+        "min_commission_rate": "0.05"
       },
       "last_total_power": "0",
       "last_validator_powers": [],
