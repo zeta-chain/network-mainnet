@@ -1,7 +1,6 @@
 #!/bin/bash
 
 GENESIS_PATH="./network_files/config/genesis.json"
-CHAINID="zetachain_70000-1"
 BALANCE="10000000000000000000azeta" # 10 ZETA
 
 # account list
