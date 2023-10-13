@@ -218,7 +218,11 @@
         "admin_policy": [],
         "ballot_maturity_blocks": "100"
       },
-      "keygen": null,
+      "keygen": {
+        "status": "PendingKeygen",
+        "granteePubkeys": [],
+        "blockNumber": "9223372036854775807"
+      },
       "last_observer_count": null,
       "core_params_list": {
         "core_params": []

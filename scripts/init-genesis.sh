@@ -29,6 +29,15 @@ DENOM_METADATA=$(cat <<EOF
 EOF
 )
 
+KEYGEN=$(cat <<EOF
+{
+  "status": "PendingKeygen",
+  "granteePubkeys": [],
+  "blockNumber": "9223372036854775807"
+}
+EOF
+)
+
 # clean up
 rm -f $GENESIS_PATH
 rm -rf ~/.zetacored
@@ -68,6 +77,9 @@ done
 
 # add denom metadata
 cat $GENESIS_PATH | jq --argjson data "$DENOM_METADATA" '.app_state["bank"]["denom_metadata"]=$data' > $TMP_GENESIS_PATH && mv $TMP_GENESIS_PATH $GENESIS_PATH
+
+# set keygen value
+cat $GENESIS_PATH | jq --argjson data "$KEYGEN" '.app_state["observer"]["keygen"]=$data' > $TMP_GENESIS_PATH && mv $TMP_GENESIS_PATH $GENESIS_PATH
 
 # check genesis validity
 zetacored validate-genesis $GENESIS_PATH
