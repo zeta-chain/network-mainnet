@@ -23,7 +23,7 @@ zetacored keys add operator --ledger --hd-path ""
 ADDRESS=$(zetacored keys show operator -a)
 BALANCE="10000000000000000000azeta" # 10 ZETA
 MONIKER="YOUR_VALIDATOR_NAME_HERE"
-zetacored init "$MONIKER" --chain-id="zetachain_7000-1"
+zetacored init "$MONIKER" --chain-id="zetachain_7000-1" # This is a temporary genenesis file and will be replaced later
 zetacored add-genesis-account $ADDRESS $BALANCE
 zetacored gentx operator 10000000000000000000azeta --chain-id=zetachain_7000-1
 zetacored validate-genesis
