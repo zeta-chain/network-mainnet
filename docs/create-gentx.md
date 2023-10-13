@@ -33,10 +33,9 @@ zetacored validate-genesis
 
 ```
 mkdir -p ./genesis_files/gentx/
-cp ~/.zetacored/config/gentx/* ./genesis_files/gentx/
-mv ./genesis_files/gentx/gentx-REPLACE_FILE_NAME_HERE ./genesis_files/gentx/gentx-$MONIKER
+FILENAME=$(~/.zetacored/config/gentx/)
+cp $FILENAME ./genesis_files/gentx/gentx-$MONIKER
 git add ./genesis_files/gentx/*
-
 git commit -m "Gentx files for $MONIKER"
 ```
 
