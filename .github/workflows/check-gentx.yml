@@ -7,13 +7,14 @@ on:
   pull_request:
     branches:
       - main
+      - ci-fix-validator
     paths:
       - "genesis_files/**"
 
 env:
-  ZETACORED_BINARY: "LINK_TO_MAINNET_BUILD_HERE"
-  ZETACLIENT_BINARY: "LINK_TO_MAINNET_BUILD_HERE"
-  CHAINID: "athens_7001-1"
+  ZETACORED_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-arm64"
+  ZETACLIENT_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-arm64"
+  CHAINID: "athens_7000-1"
   KEYRING: "test"
   HOSTNAME: checker
 
@@ -76,7 +77,7 @@ jobs:
         run: |
           zetacored start --trace \
           --minimum-gas-prices=0.0001azeta \
-          --json-rpc.api eth,txpool,personal,net,debug,web3,miner \
+          --json-rpc.api eth,txpool,web3,miner \
           --api.enable >> ~/.zetacored/zetacored.log 2>&1  &
 
           sleep 6
