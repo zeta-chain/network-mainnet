@@ -15,7 +15,7 @@ on:
 env:
   ZETACORED_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-amd64"
   ZETACLIENT_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-amd64"
-  CHAINID: "athens_7000-1"
+  CHAINID: "zetachain_7000-1"
   KEYRING: "test"
   HOSTNAME: checker
 
@@ -83,10 +83,10 @@ jobs:
         run: |
           zetacored start --trace \
           --minimum-gas-prices=0.0001azeta \
-          --json-rpc.api eth,txpool,web3,miner \
+          --json-rpc.api eth,net,web3 \
           --api.enable >> ~/.zetacored/zetacored.log 2>&1  &
 
-          sleep 6
+          sleep 8
           latest_block_height=$(curl --request GET -sL --url 'localhost:26657/status' --header 'Content-Type: application/json' | jq '.result.sync_info.latest_block_height|tonumber')
 
           if [ "$latest_block_height" -ge 0 ]; then
