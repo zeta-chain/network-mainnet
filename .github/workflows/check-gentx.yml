@@ -13,8 +13,8 @@ on:
       - "genesis_files/**"
 
 env:
-  ZETACORED_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-arm64"
-  ZETACLIENT_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-arm64"
+  ZETACORED_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-amd64"
+  ZETACLIENT_BINARY: "https://github.com/zeta-chain/node/releases/download/v10.0.7/zetacored-ubuntu-22-amd64"
   CHAINID: "athens_7000-1"
   KEYRING: "test"
   HOSTNAME: checker
