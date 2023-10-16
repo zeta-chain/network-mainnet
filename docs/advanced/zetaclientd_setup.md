@@ -2,23 +2,26 @@
 
 The ZetaChan Genesis process is broken up into two phases:
 
-Phase 1: Node Setup
+Phase 1: Core Genesis
 
 - Setup your validator node
 - Generate keys
 - Submit keys to the coordinator via GitHub PR
-
-Phase 2: Genesis
-
 - Wait for updated genesis file to be provided by the coordinator
 - Start Your Node
-- Wait for the coordinator to confirm network genesis is complete
+
+Phase 2: TSS & ZetaClient Genesis
+
+More details about this will be shared with the predetermined observer signers
 
 ## Phase 1: Node Setup
 
 Here we assume a typical Ubuntu 22.04 LTS x86_64 setup. If you are using a
 different OS you may need to make some adjustments. For more information about
 the compute node requirement see [here](node_requirements.md)
+
+This is process is designed for ease of use and is not the most secure approach. When setting up a validator we highly reccomend using a hardware wallet for storing operator keys and a HSM or other key managment solution to protect your block signing key.
+
 
 #### Make sure `jq`, `git`, `curl`, and `make` are installed.
 
