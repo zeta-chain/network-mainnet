@@ -7,7 +7,7 @@
           "moniker": "bar",
           "identity": "",
           "website": "",
-          "security_contact": "security@example.com",
+          "security_contact": "bar@example.com",
           "details": ""
         },
         "commission": {
@@ -57,6 +57,6 @@
     "tip": null
   },
   "signatures": [
-    "RAHlbdfytRhQHwtpy30XF36as8zrMKwGKZZTnq5Vj8hJbXgfdQPibx8FbgnGCKPADZVZUl2UyJuqdcf/Qy5YKQA="
+    "6XhVX4BMoV0o7k6/SqlyuBVTDnkhc8dZFnbU1b6nH0B1CuPb24bj0A3Ckt9zOYJ0c8nMO/W4jmiPL5a8HLmQmwE="
   ]
 }
