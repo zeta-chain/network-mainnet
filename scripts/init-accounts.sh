@@ -16,6 +16,9 @@ for addr in "${accounts[@]}"; do
     zetacored add-genesis-account $addr $BALANCE --home ./network_files
 done
 
+# collect gentxs
+zetacored collect-gentxs --home ./network_files > /dev/null 2>&1
+
 # check genesis
 zetacored validate-genesis $GENESIS_PATH
 if [ $? -ne 0 ]; then
