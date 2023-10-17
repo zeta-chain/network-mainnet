@@ -49,7 +49,7 @@ mv ~/.zetacored/config/genesis.json $GENESIS_PATH
 
 # custom params
 params=(
-    '.genesis_time="2023-10-17T19:00:00Z"'
+    '.genesis_time="2023-10-18T19:00:00Z"'
     '.consensus_params["block"]["max_gas"]="10000000"'
     '.app_state["bank"]["params"]["default_send_enabled"]=false'
     '.app_state["bank"]["denom_metadata"]="false"'
