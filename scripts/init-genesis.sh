@@ -65,8 +65,10 @@ params=(
     '.app_state["gov"]["voting_params"]["voting_period"]="86400s"' # 1 day
     '.app_state["gov"]["tally_params"]["quorum"]="0.4"' # 40%
     '.app_state["evm"]["params"]["evm_denom"]="azeta"'
-    '.app_state["observer"]["params"]["observer_params"]=[]'
     '.app_state["observer"]["params"]["admin_policy"]=[]'
+    '.app_state["observer"]["params"]["observer_params"][0]["min_observer_delegation"]="1.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][1]["min_observer_delegation"]="1.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][2]["min_observer_delegation"]="1.000000000000000000"'
 )
 
 # apply custom params

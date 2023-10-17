@@ -214,7 +214,35 @@
         "gasPriceIncreaseFlags": null
       },
       "params": {
-        "observer_params": [],
+        "observer_params": [
+          {
+            "chain": {
+              "chain_name": "btc_regtest",
+              "chain_id": "18444"
+            },
+            "ballot_threshold": "0.660000000000000000",
+            "min_observer_delegation": "1.000000000000000000",
+            "is_supported": true
+          },
+          {
+            "chain": {
+              "chain_name": "goerli_localnet",
+              "chain_id": "1337"
+            },
+            "ballot_threshold": "0.660000000000000000",
+            "min_observer_delegation": "1.000000000000000000",
+            "is_supported": true
+          },
+          {
+            "chain": {
+              "chain_name": "zeta_mainnet",
+              "chain_id": "101"
+            },
+            "ballot_threshold": "0.660000000000000000",
+            "min_observer_delegation": "1.000000000000000000",
+            "is_supported": true
+          }
+        ],
         "admin_policy": [],
         "ballot_maturity_blocks": "100"
       },
