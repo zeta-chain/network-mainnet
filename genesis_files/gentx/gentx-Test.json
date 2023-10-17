@@ -4,10 +4,10 @@
       {
         "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
         "description": {
-          "moniker": "TestExample",
+          "moniker": "bar",
           "identity": "",
           "website": "",
-          "security_contact": "test@example.com",
+          "security_contact": "security@example.com",
           "details": ""
         },
         "commission": {
@@ -16,16 +16,19 @@
           "max_change_rate": "0.010000000000000000"
         },
         "min_self_delegation": "1",
-        "delegator_address": "zeta1fvw5e8n2n0njjj34wm75k03u3zuwd8uaald4l0",
-        "validator_address": "zetavaloper1fvw5e8n2n0njjj34wm75k03u3zuwd8uael4fje",
+        "delegator_address": "zeta1hyr6h4huzhwuq72as9q7ldle67j7sse0mjhfew",
+        "validator_address": "zetavaloper1hyr6h4huzhwuq72as9q7ldle67j7sse0lj045c",
         "pubkey": {
           "@type": "/cosmos.crypto.ed25519.PubKey",
           "key": "Zj1bqx1GOfqtZum7lLNgX+iFiuxUGScmcb31UJViUBk="
         },
-        "value": { "denom": "azeta", "amount": "1000000000000000000" }
+        "value": {
+          "denom": "azeta",
+          "amount": "1000000000000000000"
+        }
       }
     ],
-    "memo": "72ada0bce89b35a0d15be2cce4474170f69f3f38@192.168.7.245:26656",
+    "memo": "72ada0bce89b35a0d15be2cce4474170f69f3f38@10.180.47.161:26656",
     "timeout_height": "0",
     "extension_options": [],
     "non_critical_extension_options": []
@@ -35,16 +38,25 @@
       {
         "public_key": {
           "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
-          "key": "A5JiUAB8asRbVHCECilaQwAPWcKc3Jiu5rpNKJ0u7SvT"
+          "key": "Ao5nTo79tkfsBFZmyNItUPaOa5fowEQm4O3s9l2bQ+v5"
         },
-        "mode_info": { "single": { "mode": "SIGN_MODE_DIRECT" } },
+        "mode_info": {
+          "single": {
+            "mode": "SIGN_MODE_DIRECT"
+          }
+        },
         "sequence": "0"
       }
     ],
-    "fee": { "amount": [], "gas_limit": "200000", "payer": "", "granter": "" },
+    "fee": {
+      "amount": [],
+      "gas_limit": "200000",
+      "payer": "",
+      "granter": ""
+    },
     "tip": null
   },
   "signatures": [
-    "UHMqJlZO3HzgvZEatuiSSOcGeBhch9hLQ1tmMmMYiIMjRIWCOoM6FnoC8yFpTvFE8qpxkYTojhxQOYoBwE4t9AE="
+    "RAHlbdfytRhQHwtpy30XF36as8zrMKwGKZZTnq5Vj8hJbXgfdQPibx8FbgnGCKPADZVZUl2UyJuqdcf/Qy5YKQA="
   ]
 }
