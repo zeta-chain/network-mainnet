@@ -69,7 +69,6 @@ params=(
     '.app_state["observer"]["params"]["observer_params"][0]["min_observer_delegation"]="1.000000000000000000"'
     '.app_state["observer"]["params"]["observer_params"][1]["min_observer_delegation"]="1.000000000000000000"'
     '.app_state["observer"]["params"]["observer_params"][2]["min_observer_delegation"]="1.000000000000000000"'
-    '.app_state["feemarket"]["params"]["min_gas_price"]="0.00000001"' # 10GWEI
 )
 
 # apply custom params
