@@ -1,1 +1,4 @@
 gentx-notes.txt
+network_files/config/node_key.json
+network_files/config/priv_validator_key.json
+network_files/data/
