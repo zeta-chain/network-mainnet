@@ -1,5 +1,5 @@
 {
-  "genesis_time": "2023-10-17T19:00:00Z",
+  "genesis_time": "2023-10-18T19:00:00Z",
   "chain_id": "zetachain_7000-1",
   "initial_height": "1",
   "consensus_params": {
@@ -30,7 +30,88 @@
         "sig_verify_cost_ed25519": "590",
         "sig_verify_cost_secp256k1": "1000"
       },
-      "accounts": []
+      "accounts": [
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1hjct6q7npsspsg3dgvzk3sdf89spmlpf7rqmnw",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1p0uwsq4naus5r4l7l744upy0k8ezzj84mn40nf",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1t5pgk2fucx3drkynzew9zln5z9r7s3wqqyy0pe",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1t0uj2z93jd2g3w94zl3jhfrn2ek6dnuk3v93j9",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1k6vh9y7ctn06pu5jngznv5dyy0rltl2qp0j30g",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta19jr7nl82lrktge35f52x9g5y5prmvchmk40zhg",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1cxj07f3ju484ry2cnnhxl5tryyex7gev0yzxtj",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        },
+        {
+          "@type": "/ethermint.types.v1.EthAccount",
+          "base_account": {
+            "address": "zeta1v66xndg92tkt9ay70yyj3udaq0ej9wl765r7lf",
+            "pub_key": null,
+            "account_number": "0",
+            "sequence": "0"
+          },
+          "code_hash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        }
+      ]
     },
     "authz": {
       "authorization": []
@@ -40,28 +121,109 @@
         "send_enabled": [],
         "default_send_enabled": false
       },
-      "balances": [],
-      "supply": [],
+      "balances": [
+        {
+          "address": "zeta1p0uwsq4naus5r4l7l744upy0k8ezzj84mn40nf",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "20000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta19jr7nl82lrktge35f52x9g5y5prmvchmk40zhg",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "40000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1t0uj2z93jd2g3w94zl3jhfrn2ek6dnuk3v93j9",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "20000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1t5pgk2fucx3drkynzew9zln5z9r7s3wqqyy0pe",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "20000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1v66xndg92tkt9ay70yyj3udaq0ej9wl765r7lf",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "40000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1k6vh9y7ctn06pu5jngznv5dyy0rltl2qp0j30g",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "40000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1hjct6q7npsspsg3dgvzk3sdf89spmlpf7rqmnw",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "20000000000000000000"
+            }
+          ]
+        },
+        {
+          "address": "zeta1cxj07f3ju484ry2cnnhxl5tryyex7gev0yzxtj",
+          "coins": [
+            {
+              "denom": "azeta",
+              "amount": "40000000000000000000"
+            }
+          ]
+        }
+      ],
+      "supply": [
+        {
+          "denom": "azeta",
+          "amount": "240000000000000000000"
+        }
+      ],
       "denom_metadata": [
         {
-          "base": "azeta",
+          "description": "The native token of ZetaChain",
           "denom_units": [
             {
               "denom": "azeta",
-              "exponent": "0",
+              "exponent": 0,
               "aliases": [
                 "attozeta"
               ]
             },
             {
               "denom": "zeta",
-              "exponent": "18"
+              "exponent": 18,
+              "aliases": []
             }
           ],
-          "description": "The native token of ZetaChain",
+          "base": "azeta",
           "display": "zeta",
           "name": "ZetaChain",
-          "symbol": "ZETA"
+          "symbol": "ZETA",
+          "uri": "",
+          "uri_hash": ""
         }
       ]
     },
@@ -158,7 +320,7 @@
         "elasticity_multiplier": 2,
         "enable_height": "0",
         "base_fee": "1000000000",
-        "min_gas_price": "0.00000001",
+        "min_gas_price": "0.000000000000000000",
         "min_gas_multiplier": "0.500000000000000000"
       },
       "block_gas": "0"
@@ -169,7 +331,504 @@
       "systemContract": null
     },
     "genutil": {
-      "gen_txs": []
+      "gen_txs": [
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "Blockdaemon",
+                  "identity": "",
+                  "website": "blockdaemon.com",
+                  "security_contact": "support@blockdaemon.com",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1t5pgk2fucx3drkynzew9zln5z9r7s3wqqyy0pe",
+                "validator_address": "zetavaloper1t5pgk2fucx3drkynzew9zln5z9r7s3wqyyunv0",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "DUKST69tW93h1OSZKQyNNQG1DnZoeY/XDfFuz0te0yg="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "10000000000000000000"
+                }
+              }
+            ],
+            "memo": "c692e280a93124c678de1748914b146cf6210363@172.17.0.7:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "Ajsf++7EyYAUl4ZntfDhy7nHlXvm3hDDL0MKVwmoJ9z6"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "D6on5wk8WteTfxlyXkREw4fnnBSeiwFqRCDyMoH1y15fQ+AWW4szXf6SpWn5USbUNkMLPkM4s7mpD9D/mx6upgA="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "Figment",
+                  "identity": "E5F274B870BDA01D",
+                  "website": "https://figment.io",
+                  "security_contact": "security@figment.io",
+                  "details": "Figment"
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "1.000000000000000000",
+                  "max_change_rate": "1.000000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1hjct6q7npsspsg3dgvzk3sdf89spmlpf7rqmnw",
+                "validator_address": "zetavaloper1hjct6q7npsspsg3dgvzk3sdf89spmlpf6rc87c",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "4P7Gx9WWjk+pYDe9jO/+njjlf5jMEoafwM3SQBj//pI="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "10000000000000000000"
+                }
+              }
+            ],
+            "memo": "3ad52e6da939646c52533390b6e21fc988d12c9d@192.168.2.112:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "A/ME5Wre92HJOJH4wBFveSeq3Yj8wZJrn/pEWc3pcrSc"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "gA6rkVoGWvcUhXeuPR+SL3ZylNGrQ92wBcy9nFpqBz5wG9bVvC5OsKVUnxMy0pBWRw98iHU+TkWpQsEOC31PKg=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "InfStones",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1t0uj2z93jd2g3w94zl3jhfrn2ek6dnuk3v93j9",
+                "validator_address": "zetavaloper1t0uj2z93jd2g3w94zl3jhfrn2ek6dnuk4vadln",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "/YSea9QT51BaUh2g/xzXpghOUui/yTYtBETHwR+/1Zg="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "10000000000000000000"
+                }
+              }
+            ],
+            "memo": "d2674e8511c312a67f6826898480d1a7079d0f25@172.0.2.219:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "A6qTNepZbDodLk2Z0y77CHRn4A/YoVJxUeEgJtRtMlzJ"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "GDST6l1b2qM2AVQxGBgQ9BkGmbqh+55IRdnhqYPXpRFQAeGWB7ZtGFa1JXokvGxHQgebYdvsRl1/a6LMj5pkfgE="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "bastion",
+                  "identity": "",
+                  "website": "https://bastiondigital.com/",
+                  "security_contact": "security@bastiondigital.com",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1p0uwsq4naus5r4l7l744upy0k8ezzj84mn40nf",
+                "validator_address": "zetavaloper1p0uwsq4naus5r4l7l744upy0k8ezzj84lndn7l",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "4OBmT48Oox4IC+lyvsw5WrDTrY8+ntQ1FwkIlbZ1TtI="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "10000000000000000000"
+                }
+              }
+            ],
+            "memo": "01de75368e56b38fc27a22c07236d50319ed129d@172.31.48.193:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/ethermint.crypto.v1.ethsecp256k1.PubKey",
+                  "key": "AyVhi69idWFuCGiJxsYHZ2IB4U/M64i7Q602PEVzZpNo"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_DIRECT"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "x91CvYs0ySWDZs7DvXnLN6SI06SBa+2LqL0d/BDJWtYdZ0ce8nwiBn54jMQqkCbjrqmsnhGH5c3g2bjtu2zhBwA="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "MP1",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1cxj07f3ju484ry2cnnhxl5tryyex7gev0yzxtj",
+                "validator_address": "zetavaloper1cxj07f3ju484ry2cnnhxl5tryyex7gevty66xy",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "DsZWn+sZ93S1B4G3mNb2a1V8akbmCWLysqQ3XaQjctc="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "10000000000000000000"
+                }
+              }
+            ],
+            "memo": "7069d3e30752526ab512b43cdd7aca1012d9a142@52.35.128.130:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "Atnv3L9LKUn+uhJQSKz159H7T3Ip8BAJyoiK4/ABSUNz"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "sffe9xziD6vesvv5bib7kD+UGYUIwjNx1PuA/PyfioEuUEYaCPfuz7aWD0cTNp5XEMm5nXjnDqYomB5iA7ucdw=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "MP4",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1v66xndg92tkt9ay70yyj3udaq0ej9wl765r7lf",
+                "validator_address": "zetavaloper1v66xndg92tkt9ay70yyj3udaq0ej9wl775mzjl",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "4pZgiUYPEW5o7UTc9QxE5rsXQ3uQqbTPVSjbzXJrLGM="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "20000000000000000000"
+                }
+              }
+            ],
+            "memo": "4d7a52d68af698c296211dec34a26cddefeb0b06@44.236.207.180:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "A033XHSNuUwe0gA1GehbAN8G+lvz9zEFFEMOtMPac1gm"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "eWLHyIM4yxOdDJWmdg6JoGAeZoST/5p/orkFtbt1Y28+Qi8yUpCUy3J+Tmh6Tq0kt2qyURzUQru75m3QGBRoAA=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "OmniChain1",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta1k6vh9y7ctn06pu5jngznv5dyy0rltl2qp0j30g",
+                "validator_address": "zetavaloper1k6vh9y7ctn06pu5jngznv5dyy0rltl2q902dz7",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "P7Wpyskb7H1ybAGX6DZbjjOztuBfVqf7DkuPiyy5x6Q="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "20000000000000000000"
+                }
+              }
+            ],
+            "memo": "d32b3e22cfcb72e11050db30a59a59cd05646046@34.225.36.174:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "AkaccaPHHvcOgOOo9lmsYHpS2d0UibouaY40mI7G3IaW"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "gHJ25zQvJr4fdPi4/IS1DzyV1cSmfGVJfVIjL9X8lI8ZXMbB73FSFukC7yPq1ghxlsSyq3vK32zVIIjEfcGsLA=="
+          ]
+        },
+        {
+          "body": {
+            "messages": [
+              {
+                "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
+                "description": {
+                  "moniker": "OmniChain2",
+                  "identity": "",
+                  "website": "",
+                  "security_contact": "",
+                  "details": ""
+                },
+                "commission": {
+                  "rate": "0.100000000000000000",
+                  "max_rate": "0.200000000000000000",
+                  "max_change_rate": "0.010000000000000000"
+                },
+                "min_self_delegation": "1",
+                "delegator_address": "zeta19jr7nl82lrktge35f52x9g5y5prmvchmk40zhg",
+                "validator_address": "zetavaloper19jr7nl82lrktge35f52x9g5y5prmvchmj4h767",
+                "pubkey": {
+                  "@type": "/cosmos.crypto.ed25519.PubKey",
+                  "key": "XMwY/ubWmBihvwta4i6BoKp6j+L8HkpfBEiedXAkBEI="
+                },
+                "value": {
+                  "denom": "azeta",
+                  "amount": "20000000000000000000"
+                }
+              }
+            ],
+            "memo": "e04ee1d6b5cc1aa24f7c1ab55139d1cec9962e39@52.45.59.77:26656",
+            "timeout_height": "0",
+            "extension_options": [],
+            "non_critical_extension_options": []
+          },
+          "auth_info": {
+            "signer_infos": [
+              {
+                "public_key": {
+                  "@type": "/cosmos.crypto.secp256k1.PubKey",
+                  "key": "Ag3Ki+x4fR1/Rw38S4CizA73rf5g24PDoDCpbaBbTYSM"
+                },
+                "mode_info": {
+                  "single": {
+                    "mode": "SIGN_MODE_LEGACY_AMINO_JSON"
+                  }
+                },
+                "sequence": "0"
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas_limit": "200000",
+              "payer": "",
+              "granter": ""
+            },
+            "tip": null
+          },
+          "signatures": [
+            "UPcQ92gSdeAjF438vN8E+W6HbqE9EimprQTMOiBCgyURI0DVD4SlyHaJyWJsaXzwNW0bWkWpWwA0pje366KQUg=="
+          ]
+        }
+      ]
     },
     "gov": {
       "starting_proposal_id": "1",
@@ -203,6 +862,11 @@
       "proposal_seq": "0",
       "proposals": [],
       "votes": []
+    },
+    "mint": {
+      "params": {
+        "mint_denom": "azeta"
+      }
     },
     "observer": {
       "ballots": [],
@@ -286,11 +950,6 @@
       "exported": false
     },
     "upgrade": {},
-    "vesting": {},
-    "mint": {
-      "params": {
-        "mint_denom": "azeta"
-      }
-    }
+    "vesting": {}
   }
 }
