@@ -60,7 +60,7 @@ jobs:
           for file in genesis_files/gentx/* ; do
             echo "Processing file: ${file}"
             ADDRESS=$(jq '.body.messages[0].delegator_address'  -r $file)
-            zetacored add-genesis-account $ADDRESS 10000000000000000000azeta
+            zetacored add-genesis-account $ADDRESS 30000000000000000000azeta
           done
 
           zetacored collect-observer-info
