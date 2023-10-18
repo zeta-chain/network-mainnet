@@ -4,7 +4,7 @@
       {
         "@type": "/cosmos.staking.v1beta1.MsgCreateValidator",
         "description": {
-          "moniker": "Omnichain1",
+          "moniker": "OmniChain1",
           "identity": "",
           "website": "",
           "security_contact": "",
@@ -20,9 +20,9 @@
         "validator_address": "zetavaloper1k6vh9y7ctn06pu5jngznv5dyy0rltl2q902dz7",
         "pubkey": {
           "@type": "/cosmos.crypto.ed25519.PubKey",
-          "key": "DsZWn+sZ93S1B4G3mNb2a1V8akbmCWLysqQ3XaQjctc="
+          "key": "P7Wpyskb7H1ybAGX6DZbjjOztuBfVqf7DkuPiyy5x6Q="
         },
-        "value": { "denom": "azeta", "amount": "10000000000000000000" }
+        "value": { "denom": "azeta", "amount": "20000000000000000000" }
       }
     ],
     "memo": "d32b3e22cfcb72e11050db30a59a59cd05646046@34.225.36.174:26656",
@@ -45,6 +45,6 @@
     "tip": null
   },
   "signatures": [
-    "y2n2g3HVgy6qKB6lP0TM6vM2jREet2q1vU+A0wNpAPY1eO8kFeGfFtUbww6YABtL4mcckCJBd8T4iilr2TtDhg=="
+    "gHJ25zQvJr4fdPi4/IS1DzyV1cSmfGVJfVIjL9X8lI8ZXMbB73FSFukC7yPq1ghxlsSyq3vK32zVIIjEfcGsLA=="
   ]
 }
