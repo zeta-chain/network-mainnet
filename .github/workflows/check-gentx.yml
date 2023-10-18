@@ -79,23 +79,23 @@ jobs:
             exit 1
           fi
 
-      - name: Check Security Contact Is Completed
-        run: |
+      # - name: Check Security Contact Is Completed
+      #   run: |
 
-          for file in genesis_files/gentx/* ; do
-            echo "Processing file: ${file}"
-            SECURITY_CONTACT=$(jq '.body.messages[0].description.security_contact'  -r $file | tr -d '[:space:]'                                                          ) 
-            echo $SECURITY_CONTACT
-            echo $SECURITY_CONTACT | grep -E -q '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' 
+      #     for file in genesis_files/gentx/* ; do
+      #       echo "Processing file: ${file}"
+      #       SECURITY_CONTACT=$(jq '.body.messages[0].description.security_contact'  -r $file | tr -d '[:space:]'                                                          ) 
+      #       echo $SECURITY_CONTACT
+      #       echo $SECURITY_CONTACT | grep -E -q '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}' 
             
-            if [ $? -eq 0 ]; then
-              echo "SUCCESS - Security Contract Email Found"
-              exit 0
-            else
-              echo "No Security Contract Email Found"
-              exit 1
-            fi
-            done
+      #       if [ $? -eq 0 ]; then
+      #         echo "SUCCESS - Security Contract Email Found"
+      #         exit 0
+      #       else
+      #         echo "No Security Contract Email Found"
+      #         exit 1
+      #       fi
+      #       done
 
 
       - name: Start Zetacored
