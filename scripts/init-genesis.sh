@@ -66,9 +66,9 @@ params=(
     '.app_state["gov"]["tally_params"]["quorum"]="0.4"' # 40%
     '.app_state["evm"]["params"]["evm_denom"]="azeta"'
     '.app_state["observer"]["params"]["admin_policy"]=[]'
-    '.app_state["observer"]["params"]["observer_params"][0]["min_observer_delegation"]="1.000000000000000000"'
-    '.app_state["observer"]["params"]["observer_params"][1]["min_observer_delegation"]="1.000000000000000000"'
-    '.app_state["observer"]["params"]["observer_params"][2]["min_observer_delegation"]="1.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][0]["min_observer_delegation"]="1000000000000000000.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][1]["min_observer_delegation"]="1000000000000000000.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][2]["min_observer_delegation"]="1000000000000000000.000000000000000000"'
     'del(.app_state["observer"]["params"]["observer_params"][3])'
     '.app_state["emissions"]["params"]["validator_emission_percentage"]="0.75"'
     '.app_state["emissions"]["params"]["observer_emission_percentage"]="0.125"'
