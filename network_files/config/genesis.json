@@ -271,9 +271,9 @@
         "min_bond_factor": "0.75",
         "avg_block_time": "6.00",
         "target_bond_ratio": "00.67",
-        "validator_emission_percentage": "00.50",
-        "observer_emission_percentage": "00.25",
-        "tss_signer_emission_percentage": "00.25",
+        "validator_emission_percentage": "0.75",
+        "observer_emission_percentage": "0.125",
+        "tss_signer_emission_percentage": "0.125",
         "duration_factor_constant": "0.001877876953694702",
         "observer_slash_amount": "100000000000000000"
       },
