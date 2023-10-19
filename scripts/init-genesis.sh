@@ -69,6 +69,7 @@ params=(
     '.app_state["observer"]["params"]["observer_params"][0]["min_observer_delegation"]="1.000000000000000000"'
     '.app_state["observer"]["params"]["observer_params"][1]["min_observer_delegation"]="1.000000000000000000"'
     '.app_state["observer"]["params"]["observer_params"][2]["min_observer_delegation"]="1.000000000000000000"'
+    '.app_state["observer"]["params"]["observer_params"][3]["min_observer_delegation"]="1.000000000000000000"'
 )
 
 # apply custom params
