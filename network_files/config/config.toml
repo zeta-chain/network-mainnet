@@ -3,7 +3,7 @@
 
 # NOTE: Any path below can be absolute (e.g. "/var/myawesomeapp/data") or
 # relative to the home directory (e.g. "data"). The home directory is
-# "$HOME/.tendermint" by default, but could be changed via $TMHOME env variable
+# "$HOME/.cometbft" by default, but could be changed via $CMTHOME env variable
 # or --home cmd flag.
 
 #######################################################################
@@ -11,7 +11,7 @@
 #######################################################################
 
 # TCP or UNIX socket address of the ABCI application,
-# or the name of an ABCI application compiled in with the Tendermint binary
+# or the name of an ABCI application compiled in with the CometBFT binary
 proxy_app = "tcp://127.0.0.1:26658"
 
 # A custom human readable name for this node
@@ -63,7 +63,7 @@ priv_validator_key_file = "config/priv_validator_key.json"
 # Path to the JSON file containing the last sign state of a validator
 priv_validator_state_file = "data/priv_validator_state.json"
 
-# TCP or UNIX socket address for Tendermint to listen on for
+# TCP or UNIX socket address for CometBFT to listen on for
 # connections from an external PrivValidator process
 priv_validator_laddr = ""
 
@@ -176,17 +176,17 @@ max_body_bytes = 1000000
 max_header_bytes = 1048576
 
 # The path to a file containing certificate that is used to create the HTTPS server.
-# Might be either absolute path or path related to Tendermint's config directory.
+# Might be either absolute path or path related to CometBFT's config directory.
 # If the certificate is signed by a certificate authority,
 # the certFile should be the concatenation of the server's certificate, any intermediates,
 # and the CA's certificate.
-# NOTE: both tls_cert_file and tls_key_file must be present for Tendermint to create HTTPS server.
+# NOTE: both tls_cert_file and tls_key_file must be present for CometBFT to create HTTPS server.
 # Otherwise, HTTP server is run.
 tls_cert_file = ""
 
 # The path to a file containing matching private key that is used to create the HTTPS server.
-# Might be either absolute path or path related to Tendermint's config directory.
-# NOTE: both tls-cert-file and tls-key-file must be present for Tendermint to create HTTPS server.
+# Might be either absolute path or path related to CometBFT's config directory.
+# NOTE: both tls-cert-file and tls-key-file must be present for CometBFT to create HTTPS server.
 # Otherwise, HTTP server is run.
 tls_key_file = ""
 
@@ -212,7 +212,7 @@ external_address = ""
 seeds = ""
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = ""
+persistent_peers = "01de75368e56b38fc27a22c07236d50319ed129d@172.31.48.193:26656,3ad52e6da939646c52533390b6e21fc988d12c9d@192.168.2.112:26656,4d7a52d68af698c296211dec34a26cddefeb0b06@44.236.207.180:26656,7069d3e30752526ab512b43cdd7aca1012d9a142@52.35.128.130:26656,c692e280a93124c678de1748914b146cf6210363@172.17.0.7:26656,d2674e8511c312a67f6826898480d1a7079d0f25@172.0.2.219:26656,d32b3e22cfcb72e11050db30a59a59cd05646046@34.225.36.174:26656,e04ee1d6b5cc1aa24f7c1ab55139d1cec9962e39@52.45.59.77:26656"
 
 # UPNP port forwarding
 upnp = false
@@ -277,6 +277,11 @@ dial_timeout = "3s"
 #   2) "v1" - prioritized mempool.
 version = "v0"
 
+# Recheck (default: true) defines whether CometBFT should recheck the
+# validity for all remaining transaction in the mempool after a block.
+# Since a block affects the application state, some transactions in the
+# mempool may become invalid. If this does not apply to your application,
+# you can disable rechecking.
 recheck = true
 broadcast = true
 wal_dir = ""

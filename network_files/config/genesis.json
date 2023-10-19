@@ -885,7 +885,7 @@
               "chain_id": "8332"
             },
             "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1.000000000000000000",
+            "min_observer_delegation": "1000000000000000000.000000000000000000",
             "is_supported": true
           },
           {
@@ -894,7 +894,7 @@
               "chain_id": "56"
             },
             "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1.000000000000000000",
+            "min_observer_delegation": "1000000000000000000.000000000000000000",
             "is_supported": true
           },
           {
@@ -903,7 +903,7 @@
               "chain_id": "1"
             },
             "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1.000000000000000000",
+            "min_observer_delegation": "1000000000000000000.000000000000000000",
             "is_supported": true
           }
         ],
