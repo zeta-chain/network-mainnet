@@ -905,15 +905,6 @@
             "ballot_threshold": "0.660000000000000000",
             "min_observer_delegation": "1.000000000000000000",
             "is_supported": true
-          },
-          {
-            "chain": {
-              "chain_name": "zeta_mainnet",
-              "chain_id": "7000"
-            },
-            "ballot_threshold": "0.660000000000000000",
-            "min_observer_delegation": "1.000000000000000000",
-            "is_supported": true
           }
         ],
         "admin_policy": [],
