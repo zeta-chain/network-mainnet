@@ -2,12 +2,13 @@
 
 GENESIS_PATH="./network_files/config/genesis.json"
 BALANCE1="20000000000000000000azeta" # 20 ZETA
-BALANCE2="40000000000000000000azeta" # 40 ZETA
+BALANCE2="50000000000000000000azeta" # 50 ZETA
 
 # account list
 accounts1=(
     "zeta1hjct6q7npsspsg3dgvzk3sdf89spmlpf7rqmnw" # Figment
     "zeta1p0uwsq4naus5r4l7l744upy0k8ezzj84mn40nf" # Bastion
+    "zeta1l07weaxkmn6z69qm55t53v4rfr43eys4cjz54h" # Bastion 2
     "zeta1t5pgk2fucx3drkynzew9zln5z9r7s3wqqyy0pe" # Blockdaemon
     "zeta1t0uj2z93jd2g3w94zl3jhfrn2ek6dnuk3v93j9" # InfStones
 )
