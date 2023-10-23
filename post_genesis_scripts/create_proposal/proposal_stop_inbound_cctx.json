@@ -6,7 +6,7 @@
       "creator": "zeta1afk9zr2hn2jsac63h4hm60vl9z3e5u69gndzf7c99cqge3vzwjzsxn0x73",
       "BlockHeaderVerificationFlags": {
         "isEthTypeChainEnabled" : true,
-        "isBtcTypeChainEnabled" : false,
+        "isBtcTypeChainEnabled" : false
       },
       "isInboundEnabled": true,
       "isOutboundEnabled": true
