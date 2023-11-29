@@ -1,0 +1,12 @@
+{
+  "title": "Evm Param Change",
+  "description": "Evm staking params",
+  "changes": [
+    {
+      "subspace": "evm",
+      "key": "MinGasPrice",
+      "value": "50000000000"
+    }
+  ],
+  "deposit": "10000000azeta"
+}
