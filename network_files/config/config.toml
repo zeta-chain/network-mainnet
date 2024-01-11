@@ -209,10 +209,10 @@ laddr = "tcp://0.0.0.0:26656"
 external_address = ""
 
 # Comma separated list of seed nodes to connect to
-seeds = ""
+seeds = "8d93468c6022fb3b263963bdea46b0a131d247cd@34.28.196.79:26656"
 
 # Comma separated list of nodes to keep persistent connections to
-persistent_peers = "01de75368e56b38fc27a22c07236d50319ed129d@172.31.48.193:26656,3ad52e6da939646c52533390b6e21fc988d12c9d@192.168.2.112:26656,4d7a52d68af698c296211dec34a26cddefeb0b06@44.236.207.180:26656,7069d3e30752526ab512b43cdd7aca1012d9a142@52.35.128.130:26656,c692e280a93124c678de1748914b146cf6210363@172.17.0.7:26656,d2674e8511c312a67f6826898480d1a7079d0f25@172.0.2.219:26656,d32b3e22cfcb72e11050db30a59a59cd05646046@34.225.36.174:26656,e04ee1d6b5cc1aa24f7c1ab55139d1cec9962e39@52.45.59.77:26656"
+persistent_peers = "e04ee1d6b5cc1aa24f7c1ab55139d1cec9962e39@52.45.59.77:26656"
 
 # UPNP port forwarding
 upnp = false
@@ -456,7 +456,7 @@ psql-conn = ""
 # When true, Prometheus metrics are served under /metrics on
 # PrometheusListenAddr.
 # Check out the documentation for the list of available metrics.
-prometheus = false
+prometheus = true
 
 # Address to listen for Prometheus collector(s) connections
 prometheus_listen_addr = ":26660"
